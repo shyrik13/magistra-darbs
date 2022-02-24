@@ -1,15 +1,15 @@
 #!/bin/bash
 
-if [ ! -f .env.local ]; then
-    cp .env .env.local
+if [ ! -f .env ]; then
+    cp .env.dist .env
 
     TMP_USER_ID=`id -u`
     TMP_GROUP_ID=`id -g`
-    sed -i 's#USER_ID=#'"USER_ID=${TMP_USER_ID}"'#g' .env.local
-    sed -i 's#GROUP_ID=#'"GROUP_ID=${TMP_GROUP_ID}"'#g' .env.local
+    sed -i 's#USER_ID=#'"USER_ID=${TMP_USER_ID}"'#g' .env
+    sed -i 's#GROUP_ID=#'"GROUP_ID=${TMP_GROUP_ID}"'#g' .env
 fi
 
-source ./.env.local
+source ./.env
 
 mkdir -p ${PROJECT_PATH_CORE}
 mkdir -p ${PROJECT_PATH}/${SYMFONY_LOG_PATH}

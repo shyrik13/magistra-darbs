@@ -15,7 +15,7 @@ services:
       - ${SYMFONY_LOG_PATH}:/var/www/project/var/logs:cached
       - ${COMPOSER_PATH}/cache:/var/www/.composer/cache:cached
       - ${CRON_LOG_PATH}:/var/log/cron:cached
-    env_file: .env.local
+    env_file: .env
     logging:
       options:
         max-size: "400m"

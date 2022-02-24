@@ -24,7 +24,7 @@ RUN ln -s /etc/nginx/sites-available/core.conf /etc/nginx/sites-enabled/core.con
 COPY certs/core.${ENV}.pub /etc/ssl/certs/core.${ENV}.pub
 COPY certs/core.${ENV}.priv /etc/ssl/certs/core.${ENV}.priv
 
-RUN echo "upstream php-upstream { server php:9000; }" > /etc/nginx/conf.d/upstream.conf
+RUN echo "upstream php-upstream { server core:9000; }" > /etc/nginx/conf.d/upstream.conf
 
 CMD ["nginx", "-g", "daemon off;"]
 # required: run this command when container is launched
