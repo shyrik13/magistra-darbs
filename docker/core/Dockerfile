@@ -115,5 +115,31 @@ RUN usermod -aG sudo www-data && \
 # Related to - https://stackoverflow.com/questions/37060171/php-ini-file-nowhere-to-be-found
 COPY php.ini /usr/local/etc/php
 
+# emscripten WASM RUST setup
+ENV PATH=/root/.cargo/bin:$PATH
+
+RUN apt-get update && apt-get upgrade -qy && \
+    apt-get install -y --no-install-recommends \
+    curl git openssl libssl-dev ca-certificates \
+    build-essential python python3 cmake && \
+    apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/* && \
+
+    curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y && \
+    rustup update && \
+    rustup default nightly
+
+RUN mkdir /emscripten && cd /emscripten && \
+    git clone https://github.com/emscripten-core/emsdk.git && ls -l && cd emsdk && \
+    git pull && ./emsdk install latest && ./emsdk activate latest && \
+    /bin/bash ./emsdk_env.sh && \
+    #ls -la && cat ./emsdk_set_env.sh >> /root/.profile && \
+
+    # curl -O https://s3.amazonaws.com/mozilla-games/emscripten/releases/emsdk-portable.tar.gz && \
+    # tar -xzf emsdk-portable.tar.gz && cd ./emsdk-portable && \
+    # ./emsdk update && ./emsdk install latest && ./emsdk activate && \
+    # /bin/bash ./emsdk_env.sh && ls -la && cat ./emsdk_set_env.sh >> /root/.profile && \
+
+    rustup target add wasm32-unknown-emscripten
+
 USER ${USER_ID}
 ENTRYPOINT ["/entrypoint.sh"]
