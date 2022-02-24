@@ -1,0 +1,15 @@
+/.idea/*
+.env.local
+/var
+/.composer/cache
+!project/core/.env
+
+# IDEs
+/.idea
+*.iml
+/.vscode
+*~
+
+# System files
+.DS_Store
+.directory
