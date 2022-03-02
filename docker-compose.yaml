@@ -60,3 +60,16 @@ services:
         max-size: "400m"
         max-file: "3"
 
+  wasm:
+    restart: on-failure
+    command: sh -c "wasm-pack build"
+    build:
+      context: docker/wasm
+    volumes:
+      - ${PROJECT_PATH_WASM}:/var/www/project/core/wasm:cached
+      - ${RUST_LOG_PATH}:/var/log/rust:delegated
+    logging:
+      options:
+        max-size: "400m"
+        max-file: "3"
+
