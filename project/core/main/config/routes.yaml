@@ -1,5 +1,13 @@
-index:
+homepage:
     path: /
     controller: App\Controller\DefaultController::indexAction
     defaults:
         _template: "homepage.html.twig"
+
+mongo_test_create:
+    path: /mongo-test-create
+    controller: App\Controller\DefaultController::testMongoCreateAction
+
+mongo_test_find:
+    path: /mongo-test-find
+    controller: App\Controller\DefaultController::testMongoFindAction

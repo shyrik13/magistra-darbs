@@ -1,0 +1,21 @@
+doctrine_mongodb:
+    auto_generate_proxy_classes: true
+    auto_generate_hydrator_classes: true
+    connections:
+        default:
+            server: '%env(resolve:DATABASE_MONGODB_URL)%'
+            options:
+                authSource: admin
+                username: '%env(resolve:MONGODB_USERNAME)%'
+                password: '%env(resolve:MONGODB_PASSWORD)%'
+    default_database: '%env(resolve:MONGODB_DB)%'
+    document_managers:
+        default:
+            auto_mapping: true
+            logging: false
+            mappings:
+                custom_mapping:
+                    is_bundle: false
+                    type: annotation
+                    dir: '%kernel.project_dir%/src/Entity/Document'
+                    prefix: App\Entity\Document
