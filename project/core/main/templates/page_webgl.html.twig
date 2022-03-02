@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('webgl') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('webgl') }}
+{% endblock %}
+
+{% block body %}
+    <h1>WebGL</h1>
+
+    <canvas id="glCanvas" width="640" height="480"></canvas>
+{% endblock %}

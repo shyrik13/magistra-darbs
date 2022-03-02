@@ -4,6 +4,24 @@ homepage:
     defaults:
         _template: "homepage.html.twig"
 
+page_wasm_opengl:
+    path: /wasm-opengl
+    controller: App\Controller\DefaultController::indexAction
+    defaults:
+        _template: "page_wasm_opengl.html.twig"
+
+page_webgl:
+    path: /webgl
+    controller: App\Controller\DefaultController::indexAction
+    defaults:
+        _template: "page_webgl.html.twig"
+
+page_webgpu:
+    path: /webgpu
+    controller: App\Controller\DefaultController::indexAction
+    defaults:
+        _template: "page_webgpu.html.twig"
+
 mongo_test_create:
     path: /mongo-test-create
     controller: App\Controller\DefaultController::testMongoCreateAction

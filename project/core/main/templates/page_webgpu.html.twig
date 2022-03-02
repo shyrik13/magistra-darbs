@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('webgpu') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('webgpu') }}
+{% endblock %}
+
+{% block body %}
+    <h1>WebGL</h1>
+
+    <canvas id="webgpu-canvas" width="640" height="480"></canvas>
+{% endblock %}

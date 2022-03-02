@@ -10,7 +10,3 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
-
-import * as wasmOpenGL from "wasm-opengl";
-
-wasmOpenGL.greet();
