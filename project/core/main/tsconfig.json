@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "module": "system",
+    "noImplicitAny": true,
+    "target": "es5",
+    "allowJs": true,
+    "typeRoots": ["./node_modules/@webgpu/types", "./node_modules/@types"]
+  }
+}

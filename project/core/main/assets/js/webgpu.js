@@ -1,1 +1,6 @@
-console.log("hello webgpu");
+import init from './webgpu/main';
+
+$(document).ready(() => {
+    const canvas = document.querySelector('#webgpu-canvas')
+    init(canvas);
+});

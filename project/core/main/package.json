@@ -5,8 +5,8 @@
         "@symfony/webpack-encore": "^1.7.0",
         "core-js": "^3.0.0",
         "regenerator-runtime": "^0.13.2",
-        "webpack-notifier": "^1.6.0",
-        "wasm-opengl": "file:../wasm/pkg"
+        "wasm-opengl": "file:../wasm/pkg",
+        "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",
     "private": true,
@@ -15,5 +15,11 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "@webgpu/types": "^0.1.13",
+        "gl-matrix": "^3.4.3",
+        "ts-loader": "^9.2.7",
+        "typescript": "^4.6.2"
     }
 }
