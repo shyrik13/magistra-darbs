@@ -25,6 +25,11 @@ Encore
     .addEntry('wasm-opengl', './assets/js/wasm-opengl.js')
     .addEntry('webgpu', './assets/js/webgpu.js')
 
+    .copyFiles({
+        from: './assets/shader',
+        to: 'shader/[path][name].[ext]'
+    })
+
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
