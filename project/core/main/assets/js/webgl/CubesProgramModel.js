@@ -5,9 +5,12 @@ import {mat4} from 'gl-matrix';
 /**
  * @singleton - use create method to get instance.
  */
-class TrianglesProgramModel {
+class CubesProgramModel {
 
     static _instance;
+
+    cubes = [];
+    vertices = 0;
 
     gl = undefined;
     programInfo = undefined;
@@ -25,7 +28,7 @@ class TrianglesProgramModel {
      * https://stackoverflow.com/questions/12669615/add-created-at-and-updated-at-fields-to-mongoose-schemas#answer-15147350
      * !!! timestamps are in UTC, after fetching it will be server timezone.
      * { versionKey: false } - because multiple php processes can use this model.
-     * @return {TrianglesProgramModel}
+     * @return {CubesProgramModel}
      */
     static create() {
         if (this._instance) {return this._instance;}
@@ -74,9 +77,19 @@ class TrianglesProgramModel {
 
         // Here's where we call the routine that builds all the
         // objects we'll be drawing.
-        this.buffers = this.initBuffers(this.gl);
+        this.cubes.push({
+            buffers: this.initBuffers(this.gl)
+        });
+        this.vertices++;
 
         this.bindScene(this.gl, this.programInfo, this.buffers);
+    }
+
+    getSceneInfo() {
+        return {
+            vertices: this.vertices,
+            points: this.vertices * 3,
+        }
     }
 
     getGpuInfo() {
@@ -100,33 +113,37 @@ class TrianglesProgramModel {
     }
 
     draw() {
-        {
-            this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-            this.gl.clear(this.gl.DEPTH_BUFFER_BIT | this.gl.COLOR_BUFFER_BIT);
+        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        this.gl.clear(this.gl.DEPTH_BUFFER_BIT | this.gl.COLOR_BUFFER_BIT);
 
-            for (let idx in this.colorShift) {
+        for (let idx in this.colorShift) {
 
-                if (this.colorShift[idx] === 1.0) {
-                    this.colorShift[idx] -= 0.01;
-                }
-                else if (this.colorShift[idx] === 0.0) {
-                    this.colorShift[idx] += 0.01;
-                }
-                else {
-                    this.colorShift[idx] += Math.random() >= 0.5 ? 0.01 : -0.01;
-                }
+            if (this.colorShift[idx] === 1.0) {
+                this.colorShift[idx] -= 0.01;
             }
+            else if (this.colorShift[idx] === 0.0) {
+                this.colorShift[idx] += 0.01;
+            }
+            else {
+                this.colorShift[idx] += Math.random() >= 0.5 ? 0.01 : -0.01;
+            }
+        }
 
-            this.gl.uniform3fv(this.colorShiftUniformLocation, this.colorShift);
+        for (let idx in this.cubes) {
+            this.bindTriangle(this.gl, this.programInfo, this.cubes[idx].buffers);
 
             const offset = 0;
             const vertexCount = 3;
             this.gl.drawArrays(this.gl.TRIANGLE_STRIP, offset, vertexCount);
         }
+
+        this.cubes.push({
+            buffers: this.initBuffers(this.gl)
+        });
+        this.vertices++;
     }
 
     initBuffers(gl) {
-
         // XYZ
         var triangleVertices = [
             0.0, 0.5, 0.0,
@@ -155,43 +172,43 @@ class TrianglesProgramModel {
         };
     }
 
-    bindScene(gl, programInfo, buffers) {
+    bindScene(gl, programInfo) {
         gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
         gl.clearDepth(1.0);                 // Clear everything
         gl.enable(gl.DEPTH_TEST);           // Enable depth testing
         gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        {
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertPosition,
-                3,
-                gl.FLOAT,
-                false,
-                3 * Float32Array.BYTES_PER_ELEMENT,
-                0);
+        gl.useProgram(programInfo.program);
+    }
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-            gl.vertexAttribPointer(
-                programInfo.attribLocations.vertColor, // Attribute location
-                3, // Number of elements per attribute
-                gl.FLOAT, // Type of elements
-                false,
-                3 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-                0 // Offset from the beginning of a single vertex to this attribute
-            );
+    // TODO: make list of normal mapped cubes
+    bindTriangle(gl, programInfo, buffers) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertPosition,
+            3,
+            gl.FLOAT,
+            false,
+            3 * Float32Array.BYTES_PER_ELEMENT,
+            0);
 
-            gl.enableVertexAttribArray(programInfo.attribLocations.vertPosition);
-            gl.enableVertexAttribArray(programInfo.attribLocations.vertColor);
-        }
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vertColor, // Attribute location
+            3, // Number of elements per attribute
+            gl.FLOAT, // Type of elements
+            false,
+            3 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
+            0 // Offset from the beginning of a single vertex to this attribute
+        );
+
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertPosition);
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertColor);
 
         this.colorShiftUniformLocation = gl.getUniformLocation(programInfo.program, 'colorShift');
 
         gl.uniform3fv(this.colorShiftUniformLocation, this.colorShift);
-        // Tell WebGL to use our program when drawing
-
-        gl.useProgram(programInfo.program);
     }
 
     initShaderProgram(gl, vsSource, fsSource) {
@@ -238,4 +255,4 @@ class TrianglesProgramModel {
     }
 }
 
-export default TrianglesProgramModel;
+export default CubesProgramModel;

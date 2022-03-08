@@ -1,7 +1,7 @@
 import { getGPUTier } from 'detect-gpu';
 
-import TrianglesProgramModel from "./webgl/TrianglesProgramModel";
-const program = TrianglesProgramModel.create();
+import CubesProgramModel from "./webgl/TrianglesProgramModel";
+const program = CubesProgramModel.create();
 
 // no needs to track CPU on web because of security reasons
 // https://stackoverflow.com/questions/9530680/javascript-dynamically-monitor-cpu-memory-usage
@@ -18,7 +18,7 @@ $(document).ready(() => {
         gpuModelElem.text(gpuTier.gpu);
 
         await program.init(canvas);
-        console.log(program.getGpuInfo());
+        // console.log(program.getGpuInfo());
         requestAnimationFrame(loop);
     })();
 
@@ -33,9 +33,9 @@ $(document).ready(() => {
         fpsElem.text(fps.toFixed(1));
         heapModelElem.text(`${performance.memory.usedJSHeapSize / Math.pow(1000, 2)} MB out of ${maxHeap} MB`);
 
-        if (fps > 15) {
+        //if (fps > 15) {
             program.draw();
             requestAnimationFrame(loop);
-        }
+        //}
     }
 });
