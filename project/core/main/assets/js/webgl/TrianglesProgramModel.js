@@ -79,6 +79,26 @@ class TrianglesProgramModel {
         this.bindScene(this.gl, this.programInfo, this.buffers);
     }
 
+    getGpuInfo() {
+        var unMaskedInfo = {
+            renderer: '',
+            vendor: ''
+        };
+
+        var dbgRenderInfo = this.gl.getExtension("WEBGL_debug_renderer_info");
+        if (dbgRenderInfo != null) {
+            unMaskedInfo.renderer = this.gl.getParameter(dbgRenderInfo.UNMASKED_RENDERER_WEBGL);
+            unMaskedInfo.vendor = this.gl.getParameter(dbgRenderInfo.UNMASKED_VENDOR_WEBGL);
+        }
+
+        return {
+            renderer: this.gl.getParameter(this.gl.RENDERER),
+            vendor: this.gl.getParameter(this.gl.VENDOR),
+            rendererInfo: unMaskedInfo.renderer,
+            vendorInfo: unMaskedInfo.vendor,
+        };
+    }
+
     draw() {
         {
             this.gl.clearColor(0.0, 0.0, 0.0, 1.0);

@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@webgpu/types": "^0.1.13",
+        "detect-gpu": "^4.0.12",
         "file-loader": "^6.2.0",
         "gl-matrix": "^3.4.3",
         "raw-loader": "^4.0.2",

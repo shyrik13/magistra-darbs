@@ -2137,6 +2137,13 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
+detect-gpu@^4.0.12:
+  version "4.0.12"
+  resolved "https://registry.yarnpkg.com/detect-gpu/-/detect-gpu-4.0.12.tgz#56d9b796b90d9321ecfbd12405fdac640bcaf201"
+  integrity sha512-70bPBv5+53OVXwlNHIXdhWpICGez4RtBEi7tUggAnyYIhp436G0draqtyQqMBtxCPv18K7xp1Hg58bN369IpkA==
+  dependencies:
+    webgl-constants "^1.1.1"
+
 detect-node@^2.0.4:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
@@ -4609,6 +4616,11 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
+
+webgl-constants@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/webgl-constants/-/webgl-constants-1.1.1.tgz#f9633ee87fea56647a60b9ce735cbdfb891c6855"
+  integrity sha512-LkBXKjU5r9vAW7Gcu3T5u+5cvSvh5WwINdr0C+9jpzVB41cjQAP5ePArDtk/WHYdVj0GefCgM73BA7FlIiNtdg==
 
 webpack-cli@^4.9.1:
   version "4.9.2"
