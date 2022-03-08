@@ -1,6 +1,6 @@
 import { getGPUTier } from 'detect-gpu';
 
-import CubesProgramModel from "./webgl/TrianglesProgramModel";
+import CubesProgramModel from "./webgl/CubesProgramModel";
 const program = CubesProgramModel.create();
 
 // no needs to track CPU on web because of security reasons
