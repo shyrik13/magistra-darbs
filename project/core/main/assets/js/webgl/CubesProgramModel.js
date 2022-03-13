@@ -1,6 +1,7 @@
 'use strict';
 
 import {mat4} from 'gl-matrix';
+import Utils from "../Utils";
 
 /**
  * @singleton - use create method to get instance.
@@ -9,15 +10,20 @@ class CubesProgramModel {
 
     static _instance;
 
+    uLight = [0.0, 0.4, 5.7];
+
     cubes = [];
-    vertices = 0;
+    triangles = 0;
+    vertex = 0;
+
+    objVertex = 0;
+    objTriangles = 0;
+    cubeObj = {};
+    textures = [];
 
     gl = undefined;
     programInfo = undefined;
     buffers = undefined;
-
-    colorShiftUniformLocation = undefined;
-    colorShift = [0.5, 0.5, 0.5];
 
     /**
      * @private
@@ -48,12 +54,16 @@ class CubesProgramModel {
         }
 
         // Vertex shader program
-        let vsSource = await fetch('build/shader/triangle.vert.glsl'); //fs.readFileSync("", "utf-8");
+        let vsSource = await fetch('build/resources/shader/cube.vert.glsl'); //fs.readFileSync("", "utf-8");
         vsSource = await vsSource.text();
 
         // Fragment shader program
-        let fsSource = await fetch('build/shader/triangle.frag.glsl'); //fs.readFileSync("./shader/triangle.frag.glsl", "utf-8");
+        let fsSource = await fetch('build/resources/shader/cube.frag.glsl'); //fs.readFileSync("./shader/triangle.frag.glsl", "utf-8");
         fsSource = await fsSource.text();
+
+        this.cubeObj = await Utils.createObjectFromFile('build/resources/obj/cube.obj');
+        this.objTriangles = this.cubeObj.triangles;
+        this.objVertex = this.cubeObj.vertexCount;
 
         // Initialize a shader program; this is where all the lighting
         // for the vertices and so forth is established.
@@ -65,30 +75,46 @@ class CubesProgramModel {
         this.programInfo = {
             program: shaderProgram,
             attribLocations: {
-                vertPosition: this.gl.getAttribLocation(shaderProgram, 'vertPosition'),
-                vertColor: this.gl.getAttribLocation(shaderProgram, 'vertColor'),
+                vPosition: this.gl.getAttribLocation(shaderProgram, 'vert_pos'),
+                vTang: this.gl.getAttribLocation(shaderProgram, 'vert_tang'),
+                vBitang: this.gl.getAttribLocation(shaderProgram, 'vert_bitang'),
+                vTexCoors: this.gl.getAttribLocation(shaderProgram, 'vert_uv'),
+                // vNormal: this.gl.getAttribLocation(shaderProgram, 'vert_normal'),
             },
             uniformLocations: {
-                //projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-                //modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-                colorShift: this.gl.getUniformLocation(shaderProgram, 'colorShift'),
+                perspectiveId: this.gl.getUniformLocation(shaderProgram, 'perspective'),
+                modelViewId: this.gl.getUniformLocation(shaderProgram, 'model_view'),
+                // modelNormMapId: this.gl.getUniformLocation(shaderProgram, 'norm_mtx'),
+                // modelProjMapId: this.gl.getUniformLocation(shaderProgram, 'proj_mtx'),
+                tNormId: this.gl.getUniformLocation(shaderProgram, 'tex_norm'),
+                tDiffId: this.gl.getUniformLocation(shaderProgram, 'tex_diffuse'),
             },
         };
+
+        const images = await Utils.loadImages([
+            'build/resources/images/cube-diffuse.jpg',
+            'build/resources/images/cube-normal.png'
+        ]);
+
+        this.bindScene(this.gl, this.programInfo);
+
+        this.initTextures(this.gl, images);
 
         // Here's where we call the routine that builds all the
         // objects we'll be drawing.
         this.cubes.push({
-            buffers: this.initBuffers(this.gl)
+            buffers: this.initBuffers(this.gl),
+            pos: {x: 0.0, y: 0.0, z: -4.5},
+            vertexCount: this.cubeObj.vertexCount,
         });
-        this.vertices++;
-
-        this.bindScene(this.gl, this.programInfo, this.buffers);
+        this.triangles += this.objTriangles;
+        this.vertex += this.objVertex;
     }
 
     getSceneInfo() {
         return {
-            vertices: this.vertices,
-            points: this.vertices * 3,
+            triangles: this.triangles,
+            vertex: this.vertex,
         }
     }
 
@@ -112,103 +138,138 @@ class CubesProgramModel {
         };
     }
 
-    draw() {
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    draw(time) {
+        this.gl.clearColor(1.0, 1.0, 1.0, 1.0);
         this.gl.clear(this.gl.DEPTH_BUFFER_BIT | this.gl.COLOR_BUFFER_BIT);
 
-        for (let idx in this.colorShift) {
-
-            if (this.colorShift[idx] === 1.0) {
-                this.colorShift[idx] -= 0.01;
-            }
-            else if (this.colorShift[idx] === 0.0) {
-                this.colorShift[idx] += 0.01;
-            }
-            else {
-                this.colorShift[idx] += Math.random() >= 0.5 ? 0.01 : -0.01;
-            }
-        }
-
         for (let idx in this.cubes) {
-            this.bindTriangle(this.gl, this.programInfo, this.cubes[idx].buffers);
+            let obj = this.cubes[idx];
+            let model = Utils.rotationModelXYZ(time, obj.pos.x, obj.pos.y, obj.pos.z);
+            this.bindObj(this.gl, this.programInfo, obj.buffers, model);
 
-            const offset = 0;
-            const vertexCount = 3;
-            this.gl.drawArrays(this.gl.TRIANGLE_STRIP, offset, vertexCount);
+            this.gl.drawArrays(this.gl.TRIANGLES, 0, obj.vertexCount);
         }
 
-        this.cubes.push({
-            buffers: this.initBuffers(this.gl)
-        });
-        this.vertices++;
+        //this.cubes.push({
+        //    buffers: this.initBuffers(this.gl),
+        //    model: Utils.rotationModelXYZ(0, 0.0, 0.0, 0.0)
+        //});
+        //this.triangles += this.objTriangles;
+        //this.vertex += this.objVertex;
+    }
+
+    initTextures(gl, images = []) {
+        // TEXTURES
+        this.textures = [];
+        for (let i = 0; i < images.length; i++) {
+            let texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+
+            // Set the parameters so we can render any size image.
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+            // Upload the image into the texture.
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
+
+            // add the texture to the array of textures.
+            this.textures.push(texture);
+        }
     }
 
     initBuffers(gl) {
-        // XYZ
-        var triangleVertices = [
-            0.0, 0.5, 0.0,
-            -0.5, -0.5, 0.0,
-            0.5, -0.5, 0.0
-        ];
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.vertices), gl.STATIC_DRAW);
 
-        // RGB
-        var triangleColor = [
-            1.0, 1.0, 0.0,
-            0.7, 0.0, 1.0,
-            0.1, 1.0, 0.6
-        ];
+        const uvsBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.uvs), gl.STATIC_DRAW);
 
-        const triangleVertexBufferObject = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBufferObject);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+        const tangBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, tangBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.tangents), gl.STATIC_DRAW);
 
-        const triangleColorBufferObject = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, triangleColorBufferObject);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleColor), gl.STATIC_DRAW);
+        const bitangBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, bitangBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.bitangents), gl.STATIC_DRAW);
+
+        // const normalsBuffer = gl.createBuffer();
+        // gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.normals), gl.STATIC_DRAW);
 
         return {
-            position: triangleVertexBufferObject,
-            color: triangleColorBufferObject,
+            positions: positionBuffer,
+            uvs: uvsBuffer,
+            tangents: tangBuffer,
+            bitangents: bitangBuffer,
+            // normals: normalsBuffer,
         };
     }
 
     bindScene(gl, programInfo) {
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
-        gl.clearDepth(1.0);                 // Clear everything
-        gl.enable(gl.DEPTH_TEST);           // Enable depth testing
-        gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        gl.clearDepth(1.0);
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LEQUAL);
+        gl.enable(gl.CULL_FACE);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         gl.useProgram(programInfo.program);
+
+        gl.enableVertexAttribArray(programInfo.attribLocations.vPosition);
+        gl.enableVertexAttribArray(programInfo.attribLocations.vTexCoors);
+        gl.enableVertexAttribArray(programInfo.attribLocations.vTang);
+        gl.enableVertexAttribArray(programInfo.attribLocations.vBitang);
+        // gl.enableVertexAttribArray(programInfo.attribLocations.vNormal);
     }
 
-    // TODO: make list of normal mapped cubes
-    bindTriangle(gl, programInfo, buffers) {
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+    bindObj(gl, programInfo, buffers, model) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.positions);
         gl.vertexAttribPointer(
-            programInfo.attribLocations.vertPosition,
-            3,
-            gl.FLOAT,
-            false,
-            3 * Float32Array.BYTES_PER_ELEMENT,
-            0);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-        gl.vertexAttribPointer(
-            programInfo.attribLocations.vertColor, // Attribute location
-            3, // Number of elements per attribute
-            gl.FLOAT, // Type of elements
-            false,
-            3 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-            0 // Offset from the beginning of a single vertex to this attribute
+            programInfo.attribLocations.vPosition, 3, gl.FLOAT, false, 0, 0
         );
 
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertPosition);
-        gl.enableVertexAttribArray(programInfo.attribLocations.vertColor);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.uvs);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vTexCoors, 2, gl.FLOAT, false, 0, 0
+        );
 
-        this.colorShiftUniformLocation = gl.getUniformLocation(programInfo.program, 'colorShift');
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.tangents);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vTang, 3, gl.FLOAT, false, 0, 0
+        );
 
-        gl.uniform3fv(this.colorShiftUniformLocation, this.colorShift);
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.bitangents);
+        gl.vertexAttribPointer(
+            programInfo.attribLocations.vBitang, 3, gl.FLOAT, false, 0, 0
+        );
+
+        // gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normals);
+        // gl.vertexAttribPointer(
+        //     programInfo.attribLocations.vNormal, 3, gl.FLOAT, false, 0, 0
+        // );
+
+        // console.log(model);
+        gl.uniformMatrix4fv(this.programInfo.uniformLocations.modelViewId, false, model);
+        // gl.uniformMatrix4fv(this.programInfo.uniformLocations.modelNormMapId, false, Utils.mtx_transpose(Utils.mtx_inverse(model)));
+        //
+        // let a = Utils.mtx_perspective(45, 680.0/382.0, 0.1, 100.0);
+        // gl.uniformMatrix4fv(this.programInfo.uniformLocations.modelProjMapId, false, Utils.mtx_mul(a, model));
+
+        const projMatrix = mat4.identity(mat4.create());
+        mat4.perspective(projMatrix, Utils.degsToRads(45.0), 4/3, 0.1, 100.0);
+        gl.uniformMatrix4fv(this.programInfo.uniformLocations.perspectiveId, false, projMatrix);
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
+        gl.uniform1i(this.programInfo.uniformLocations.tDiffId, 0);
+
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
+        gl.uniform1i(this.programInfo.uniformLocations.tNormId, 1);
     }
 
     initShaderProgram(gl, vsSource, fsSource) {

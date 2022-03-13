@@ -26,8 +26,8 @@ Encore
     .addEntry('webgpu', './assets/js/webgpu.js')
 
     .copyFiles({
-        from: './assets/shader',
-        to: 'shader/[path][name].[ext]'
+        from: './assets/resources',
+        to: 'resources/[path][name].[ext]'
     })
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

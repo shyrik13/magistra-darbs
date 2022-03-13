@@ -22,7 +22,10 @@ $(document).ready(() => {
         requestAnimationFrame(loop);
     })();
 
+    // TODO: measures https://developer.mozilla.org/en-US/docs/Web/API/Performance/measure
+
     let then = 0;
+    let time = 0;
     const maxHeap = performance.memory.jsHeapSizeLimit / Math.pow(1000, 2);
     const loop = (now) => {
         now *= 0.001;                          // convert to seconds
@@ -34,7 +37,7 @@ $(document).ready(() => {
         heapModelElem.text(`${performance.memory.usedJSHeapSize / Math.pow(1000, 2)} MB out of ${maxHeap} MB`);
 
         //if (fps > 15) {
-            program.draw();
+            program.draw(time += 0.01);
             requestAnimationFrame(loop);
         //}
     }
