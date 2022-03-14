@@ -17,7 +17,7 @@ void main(void)
     vec2 uv = frag_uv;
 
     vec3 albedo = texture2D(tex_diffuse, uv).rgb;
-    vec3 ambient = 0.3 * albedo;
+    vec3 ambient = 0.7 * albedo;
 
     // Normal mapping
     vec3 norm = normalize(texture2D(tex_norm, uv).rgb * 2.0 - 1.0);

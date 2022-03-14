@@ -125,6 +125,12 @@ class Utils {
     static degsToRads(deg) {
         return (deg * Math.PI) / 180.0;
     }
+
+    static getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min) / 100;
+    }
 }
 
 export default Utils;

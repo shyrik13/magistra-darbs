@@ -13,8 +13,13 @@
 {% block body %}
     <h1>WebGL</h1>
 
-    <div>GPU: <span id="gpu-model"></span> <span id="gpu"></span></div>
-    <div>Used heap memory: <span id="heap-memory"></span></div>
+    <div>Agent: <span id="agent"></span></div>
+    <div>GPU: <span id="gpu-model"></span></div>
+    <div>GPU: <span id="gpu"></span></div>
+    <div>CPU: <span id="cpu"></span></div>
+    <div>Used heap memory: <span id="heap-memory">not available</span></div>
+    <div>Vertex: <span id="scene-vertex"></span></div>
+    <div>Triangles: <span id="scene-triangles"></span></div>
     <div>FPS: <span id="fps"></span></div>
     <canvas id="webgl-canvas" width="640" height="480"></canvas>
 {% endblock %}

@@ -104,7 +104,7 @@ class CubesProgramModel {
         // objects we'll be drawing.
         this.cubes.push({
             buffers: this.initBuffers(this.gl),
-            pos: {x: 0.0, y: 0.0, z: -4.5},
+            pos: {x: -20.0, y: 20.0, z: -50.0},
             vertexCount: this.cubeObj.vertexCount,
         });
         this.triangles += this.objTriangles;
@@ -116,6 +116,10 @@ class CubesProgramModel {
             triangles: this.triangles,
             vertex: this.vertex,
         }
+    }
+
+    getContext() {
+        return this.gl;
     }
 
     getGpuInfo() {
@@ -139,7 +143,7 @@ class CubesProgramModel {
     }
 
     draw(time) {
-        this.gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.clear(this.gl.DEPTH_BUFFER_BIT | this.gl.COLOR_BUFFER_BIT);
 
         for (let idx in this.cubes) {
@@ -150,12 +154,14 @@ class CubesProgramModel {
             this.gl.drawArrays(this.gl.TRIANGLES, 0, obj.vertexCount);
         }
 
-        //this.cubes.push({
-        //    buffers: this.initBuffers(this.gl),
-        //    model: Utils.rotationModelXYZ(0, 0.0, 0.0, 0.0)
-        //});
-        //this.triangles += this.objTriangles;
-        //this.vertex += this.objVertex;
+        this.cubes.push({
+            buffers: this.initBuffers(this.gl),
+            // Utils.getRandomIntInclusive(-2000, 2000) => min -20, max 20
+            pos: {x: Utils.getRandomIntInclusive(-2000, 2000), y: Utils.getRandomIntInclusive(-2000, 2000), z: -50.0},
+            vertexCount: this.cubeObj.vertexCount
+        });
+        this.triangles += this.objTriangles;
+        this.vertex += this.objVertex;
     }
 
     initTextures(gl, images = []) {
