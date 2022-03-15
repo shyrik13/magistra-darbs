@@ -60,9 +60,6 @@ class Utils {
                 let deltaPos1 = vec3.create(); vec3.sub(deltaPos1, vs[1], vs[0]);
                 let deltaPos2 = vec3.create(); vec3.sub(deltaPos2, vs[2], vs[0]);
 
-                //console.log(deltaPos1);
-                //console.log(deltaPos2);
-
                 let deltaUV1 = vec2.create(); vec2.sub(deltaUV1, uvs[1], uvs[0]);
                 let deltaUV2 = vec2.create(); vec2.sub(deltaUV2, uvs[2], uvs[0]);
 

@@ -21,7 +21,8 @@ impl Image {
 
     /// Creates an image from raw data as vector
     pub fn from_vec(data: Vec<u8>, width: u32, height: u32) -> Self {
-        let channels = 4; // RGBA
+        let channels = 3; // RGB
+
         assert!(data.len() as u32 == width * height * channels);
         Self {
             data,

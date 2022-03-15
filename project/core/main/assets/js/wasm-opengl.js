@@ -7,11 +7,15 @@ const tick_teaser = () => {
     requestAnimationFrame(tick_teaser);
 }
 
-function start() {
+async function start() {
     if (teaser_ctx == null) {
-        teaser_ctx = wasmOpenGL.Context.new();
+        let source = await fetch('build/resources/obj/cube.obj');
+        let obj_data = await source.text();
+
+        teaser_ctx = wasmOpenGL.Context.new("rust-gl", obj_data);
+        console.log(teaser_ctx);
     }
-    requestAnimationFrame(tick_teaser);
+    //requestAnimationFrame(tick_teaser);
 }
 
 start();

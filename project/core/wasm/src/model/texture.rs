@@ -63,11 +63,11 @@ impl Texture {
             .tex_image_2d_with_i32_and_i32_and_i32_and_format_and_type_and_opt_u8_array(
                 GL::TEXTURE_2D,
                 0,
-                GL::RGBA as i32,
+                GL::RGB as i32,
                 width as i32,
                 height as i32,
                 0,
-                GL::RGBA,
+                GL::RGB,
                 GL::UNSIGNED_BYTE,
                 pixels,
             )
