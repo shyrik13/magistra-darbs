@@ -5,20 +5,6 @@ pub struct Image {
 }
 
 impl Image {
-    /// Creates a default image of one white pixel
-    pub fn new() -> Self {
-        Self {
-            data: vec![255, 255, 255, 255],
-            width: 1,
-            height: 1,
-        }
-    }
-
-    /// Creates an image from raw data
-    pub fn from_raw(data: &[u8], width: u32, height: u32) -> Self {
-        Self::from_vec(data.into(), width, height)
-    }
-
     /// Creates an image from raw data as vector
     pub fn from_vec(data: Vec<u8>, width: u32, height: u32) -> Self {
         let channels = 3; // RGB

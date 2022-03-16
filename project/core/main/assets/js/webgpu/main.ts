@@ -3,7 +3,7 @@ import { Scene } from './scene';
 import { Camera } from './camera';
 import { WebGpuRenderer } from './renderer'
 
-export default function init(canvas: any) {
+export default function init(canvas: HTMLCanvasElement) {
     const camera = new Camera(canvas.width / canvas.height);
     camera.z = 7
     const scene = new Scene();

@@ -1,10 +1,16 @@
 use web_sys::{WebGlRenderingContext as GL, WebGlUniformLocation};
-use crate::model::{program, Vertex};
+use crate::model::{program, Primitive};
 
 pub struct DefaultPipeline {
     pub program: program::Program,
-    // pub transform_loc: Option<WebGlUniformLocation>,
-    // pub normal_transform_loc: Option<WebGlUniformLocation>,
+    pub perspective_loc: Option<WebGlUniformLocation>,
+    pub tex_diffuse_loc: Option<WebGlUniformLocation>,
+    pub tex_norm_loc: Option<WebGlUniformLocation>,
+    pub model_view_loc: Option<WebGlUniformLocation>,
+    pub vert_pos_loc: i32,
+    pub vert_uv_loc: i32,
+    pub vert_tang_loc: i32,
+    pub vert_bitang_loc: i32
 }
 
 impl DefaultPipeline {
@@ -12,75 +18,57 @@ impl DefaultPipeline {
         let program = program::Program::new(gl.clone(), vert_src, frag_src);
         program.bind();
 
-        // let perspective_id = program.get_uniform_loc("perspective");
+        let perspective_loc = program.get_uniform_loc("perspective");
+        let tex_diffuse_loc = program.get_uniform_loc("tex_diffuse");
+        let tex_norm_loc = program.get_uniform_loc("tex_norm");
+        let model_view_loc = program.get_uniform_loc("model_view");
+
+        let vert_pos_loc = program.get_attrib_loc("vert_pos");
+        let vert_uv_loc = program.get_attrib_loc("vert_uv");
+        let vert_tang_loc = program.get_attrib_loc("vert_tang");
+        let vert_bitang_loc = program.get_attrib_loc("vert_bitang");
 
         Self {
-            program
+            program,
+            perspective_loc,
+            tex_diffuse_loc,
+            tex_norm_loc,
+            model_view_loc,
+            vert_pos_loc,
+            vert_uv_loc,
+            vert_tang_loc,
+            vert_bitang_loc
         }
     }
 
-    pub fn bind_attribs(&self) {
-        // Position
-        let vert_pos_loc = self.program.get_attrib_loc("vert_pos");
+    pub fn bind(&self, primitive: &Primitive) {
 
-        // Number of bytes between each vertex element
-        let stride = std::mem::size_of::<Vertex>() as i32;
-        // Offset of vertex data from the beginning of the buffer
-        let offset = 0;
-
+        // position coordinates
+        self.program.gl.bind_buffer(GL::ARRAY_BUFFER, primitive.position_buffer.as_ref());
         self.program.gl.vertex_attrib_pointer_with_i32(
-            vert_pos_loc as u32,
-            3,
-            GL::FLOAT,
-            false,
-            stride,
-            offset,
+            self.vert_pos_loc as u32, 3, GL::FLOAT, false, 0, 0
         );
-        self.program
-            .gl
-            .enable_vertex_attrib_array(vert_pos_loc as u32);
+        self.program.gl.enable_vertex_attrib_array(self.vert_pos_loc as u32);
 
         // uv (texture) coordinates
-        let vert_uv_loc = self.program.get_attrib_loc("vert_uv");
-
-        let offset = 3 * std::mem::size_of::<f32>() as i32;
+        self.program.gl.bind_buffer(GL::ARRAY_BUFFER, primitive.uv_buffer.as_ref());
         self.program.gl.vertex_attrib_pointer_with_i32(
-            vert_uv_loc as u32,
-            2,
-            GL::FLOAT,
-            false,
-            stride,
-            offset,
+            self.vert_uv_loc as u32, 2, GL::FLOAT, false, 0, 0
         );
-        self.program.gl.enable_vertex_attrib_array(vert_uv_loc as u32);
+        self.program.gl.enable_vertex_attrib_array(self.vert_uv_loc as u32);
 
         // tang coordinates
-        let vert_tang_loc = self.program.get_attrib_loc("vert_tang");
-
-        let offset = 5 * std::mem::size_of::<f32>() as i32;
+        self.program.gl.bind_buffer(GL::ARRAY_BUFFER, primitive.tang_buffer.as_ref());
         self.program.gl.vertex_attrib_pointer_with_i32(
-            vert_tang_loc as u32,
-            3,
-            GL::FLOAT,
-            false,
-            stride,
-            offset,
+            self.vert_tang_loc as u32, 3, GL::FLOAT, false, 0, 0
         );
-        self.program
-            .gl
-            .enable_vertex_attrib_array(vert_tang_loc as u32);
+        self.program.gl.enable_vertex_attrib_array(self.vert_tang_loc as u32);
 
         // bitang coordinates
-        let vert_bitang_loc = self.program.get_attrib_loc("vert_bitang");
-        let offset = 8 * std::mem::size_of::<f32>() as i32;
+        self.program.gl.bind_buffer(GL::ARRAY_BUFFER, primitive.bitang_buffer.as_ref());
         self.program.gl.vertex_attrib_pointer_with_i32(
-            vert_bitang_loc as u32,
-            2,
-            GL::FLOAT,
-            false,
-            stride,
-            offset,
+            self.vert_bitang_loc as u32, 3, GL::FLOAT, false, 0, 0
         );
-        self.program.gl.enable_vertex_attrib_array(vert_bitang_loc as u32);
+        self.program.gl.enable_vertex_attrib_array(self.vert_bitang_loc as u32);
     }
 }

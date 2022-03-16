@@ -7,11 +7,12 @@ pub struct Texture {
     pub handle: WebGlTexture,
     pub width: u32,
     pub height: u32,
+    pub texture_num: u32
 }
 
 impl Texture {
     /// Returns a new texture uploading data from the specified image
-    pub fn from_image(gl: GL, image: &Image) -> Self {
+    pub fn from_image(gl: GL, image: &Image, texture_num: u32) -> Self {
         let handle = gl.create_texture().expect("Failed to create texture");
 
         let mut texture = Self {
@@ -19,9 +20,10 @@ impl Texture {
             handle,
             width: 0,
             height: 0,
+            texture_num
         };
 
-        texture.bind();
+        texture.bind(texture_num);
 
         texture
             .gl
@@ -43,17 +45,13 @@ impl Texture {
         texture
     }
 
-    /// Returns a new default texture with a default image (2x2 red, blue, green, white)
-    pub fn new(gl: GL) -> Self {
-        let pixels = [
-            255u8, 0, 0, 255, 0, 255, 0, 255, 0, 0, 255, 255, 255, 255, 255, 255,
-        ];
-        let image = Image::from_raw(&pixels, 2, 2);
-        Self::from_image(gl, &image)
+    pub fn bind(&self, texture_num: u32) {
+        self.gl.active_texture(texture_num);
+        self.gl.bind_texture(GL::TEXTURE_2D, Some(&self.handle));
     }
 
-    pub fn bind(&self) {
-        //self.gl.active_texture(GL::TEXTURE0);
+    pub fn bind_self(&self) {
+        self.gl.active_texture(self.texture_num);
         self.gl.bind_texture(GL::TEXTURE_2D, Some(&self.handle));
     }
 

@@ -1,13 +1,16 @@
 use na::{Vector2, Vector3};
 use nalgebra as na;
 use std::ops::{Sub, Mul};
-use crate::model::Vertex;
 
-pub fn obj_file_data_to_vertex_vector_data(obj_file_data: &str) -> (Vec<Vertex>, i32, i32) {
+pub fn obj_file_data_to_vertex_vector_data(obj_file_data: &str) -> (Vec<f32>, Vec<f32>, Vec<f32>, Vec<f32>, i32, i32) {
     let mut vec_positions: Vec<[f32; 3]> = Vec::new();
     let mut vec_uv: Vec<[f32; 2]> = Vec::new();
     let mut vec_normals: Vec<[f32; 3]> = Vec::new();
-    let mut vec_vertex: Vec<Vertex> = Vec::new();
+
+    let mut vec_obj_vertices: Vec<f32> = Vec::new();
+    let mut vec_obj_uvs: Vec<f32> = Vec::new();
+    let mut vec_obj_tangents: Vec<f32> = Vec::new();
+    let mut vec_obj_bitangent: Vec<f32> = Vec::new();
 
     let mut triangles = 0;
     let mut vertex_count = 0;
@@ -88,12 +91,24 @@ pub fn obj_file_data_to_vertex_vector_data(obj_file_data: &str) -> (Vec<Vertex>,
             for i in 0..temp_vec_vertex.len() {
                 let temp_vertex = temp_vec_vertex[i];
 
-                let vertex: Vertex = Vertex::new(temp_vertex.0, temp_vertex.1, /*temp_vertex.2,*/ tangent, bitangent);
-                vec_vertex.push(vertex);
+                vec_obj_vertices.push(temp_vertex.0[0]);
+                vec_obj_vertices.push(temp_vertex.0[1]);
+                vec_obj_vertices.push(temp_vertex.0[2]);
+
+                vec_obj_uvs.push(temp_vertex.1[0]);
+                vec_obj_uvs.push(temp_vertex.1[1]);
+
+                vec_obj_tangents.push(tangent[0]);
+                vec_obj_tangents.push(tangent[1]);
+                vec_obj_tangents.push(tangent[2]);
+
+                vec_obj_bitangent.push(bitangent[0]);
+                vec_obj_bitangent.push(bitangent[1]);
+                vec_obj_bitangent.push(bitangent[2]);
             }
 
         }
     }
 
-    (vec_vertex, triangles, vertex_count)
+    (vec_obj_vertices, vec_obj_uvs, vec_obj_tangents, vec_obj_bitangent, triangles, vertex_count)
 }
