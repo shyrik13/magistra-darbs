@@ -7,12 +7,15 @@ pub struct Texture {
     pub handle: WebGlTexture,
     pub width: u32,
     pub height: u32,
-    pub texture_num: u32
+    pub texture_num: u32,
+    pub uniform_key: String
 }
+
+pub const TEXTURE_IDS: &'static [u32] = &[GL::TEXTURE0, GL::TEXTURE1];
 
 impl Texture {
     /// Returns a new texture uploading data from the specified image
-    pub fn from_image(gl: GL, image: &Image, texture_num: u32) -> Self {
+    pub fn from_image(gl: GL, image: &Image, texture_num: u32, uniform_key: &str) -> Self {
         let handle = gl.create_texture().expect("Failed to create texture");
 
         let mut texture = Self {
@@ -20,7 +23,8 @@ impl Texture {
             handle,
             width: 0,
             height: 0,
-            texture_num
+            texture_num,
+            uniform_key: uniform_key.to_string()
         };
 
         texture.bind(texture_num);

@@ -34,7 +34,7 @@ features = [
 default = ["console_error_panic_hook"]
 
 [dependencies]
-wasm-bindgen = "0.2.63"
+wasm-bindgen = { version = "0.2.63", features = ["serde-serialize"] }
 
 # The `console_error_panic_hook` crate provides better debugging of panics by
 # logging them with `console.error`. This is great for development, but requires
@@ -53,6 +53,9 @@ js-sys = "0.3.45"
 nalgebra = "0.23.0"
 rand = { version = "0.7", features = ["wasm-bindgen"] }
 png = "0.16.7"
+serde_json = "1.0.79"
+serde_derive = "1.0.136"
+serde = "1.0.136"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.13"

@@ -1,5 +1,7 @@
 mod utils;
 
+extern crate serde_json;
+
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 
@@ -9,10 +11,16 @@ use web_sys::*;
 
 use crate::model::{*};
 use crate::model::common::obj_file_data_to_vertex_vector_data;
+
 use wasm_bindgen::__rt::WasmRefCell;
 use rand::Rng;
 
+extern crate console_error_panic_hook;
+
 mod model;
+
+#[macro_use]
+extern crate serde_derive;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -54,6 +62,35 @@ macro_rules! log {
 }
 
 #[wasm_bindgen]
+pub struct SceneInit {
+    canvas_id: String,
+    obj_file_data: String,
+    shaders: JsShaders,
+    textures_images: Vec<JsTextureImage>,
+    render_params: JsRenderParams,
+}
+
+#[wasm_bindgen]
+impl SceneInit {
+    pub fn new(
+        canvas_id: &str,
+        obj_file_data: &str,
+        js_shaders: &JsValue,
+        js_textures_images: &JsValue,
+        js_render_params: &JsValue
+    ) -> Self {
+        // console_error_panic_hook::set_once();
+        // log(format!("{:?}", render_params).as_ref());
+
+        let shaders: JsShaders = js_shaders.into_serde().unwrap();
+        let textures_images: Vec<JsTextureImage> = js_textures_images.into_serde().unwrap();
+        let render_params: JsRenderParams = js_render_params.into_serde().unwrap();
+
+        Self { canvas_id: canvas_id.to_string(), obj_file_data: obj_file_data.to_string(), shaders, textures_images, render_params }
+    }
+}
+
+#[wasm_bindgen]
 pub struct SceneInfo {
     triangles: i32,
     vertex_count: i32
@@ -85,19 +122,19 @@ pub struct Context {
     nodes: Vec<model::Node>,
     textures: Vec<Texture>,
     triangles: i32,
-    vertex_count: i32
+    vertex_count: i32,
+    render_params: JsRenderParams
 }
 
 #[wasm_bindgen]
 impl Context {
 
-    pub fn new(canvas_id: &str, obj_file_data: &str) -> Result<Context, JsValue> {
-        let window = web_sys::window().unwrap();
+    pub fn new(scene_init: SceneInit) -> Result<Context, JsValue> {
 
-        let canvas = get_canvas(canvas_id)?;
+        let canvas = get_canvas(scene_init.canvas_id.as_ref())?;
         let gl = get_gl_context(&canvas)?;
 
-        let obj_data = obj_file_data_to_vertex_vector_data(obj_file_data);
+        let obj_data = obj_file_data_to_vertex_vector_data(scene_init.obj_file_data.as_ref());
         let obj = Geometry::new(
             obj_data.0, obj_data.1, obj_data.2,
             obj_data.3, obj_data.4, obj_data.5
@@ -105,21 +142,21 @@ impl Context {
         let triangles = obj.triangles;
         let vertex_count = obj.vertex_count;
 
-        let default_pipeline = create_default_program(&gl);
+        let default_pipeline = create_default_program(&gl, scene_init.shaders);
 
         let mut nodes = vec![];
 
         let mut obj_node = model::Node::new(model::Primitive::new(gl.clone(), &obj));
-        obj_node.set_x_y_z(-20.0, 20.0, -50.0);
+        let init_pos = scene_init.render_params.init_pos.as_ref();
+        obj_node.set_x_y_z(init_pos[0], init_pos[1], init_pos[2]);
         nodes.push(obj_node);
 
-        let image_diffuse = Image::from_png(include_bytes!("../res/images/cube-diffuse.png"));
-        let image_normal = Image::from_png(include_bytes!("../res/images/cube-normal.png"));
+        let mut textures = vec![];
 
-        let textures = vec![
-            Texture::from_image(gl.clone(), &image_diffuse, GL::TEXTURE0),
-            Texture::from_image(gl.clone(), &image_normal, GL::TEXTURE1),
-        ];
+        for (i, jti) in scene_init.textures_images.iter().enumerate() {
+            let image = Image::from_png(jti.data.as_ref());
+            textures.push(Texture::from_image(gl.clone(), &image,  texture::TEXTURE_IDS[i], jti.id.as_ref()));
+        }
 
         // Set graphics state
         gl.enable(GL::DEPTH_TEST);
@@ -137,7 +174,8 @@ impl Context {
             nodes,
             textures,
             triangles,
-            vertex_count
+            vertex_count,
+            render_params: scene_init.render_params
         };
 
         Ok(ret)
@@ -163,12 +201,11 @@ impl Context {
             perspective.to_homogeneous().as_slice(),
         );
 
-        // Texture
-        self.textures[0].bind_self();
-        self.gl.uniform1i(self.default_pipeline.tex_diffuse_loc.as_ref(), 0);
-
-        self.textures[1].bind_self();
-        self.gl.uniform1i(self.default_pipeline.tex_norm_loc.as_ref(), 1);
+        // Textures
+        for (i, t) in self.textures.iter().enumerate() {
+            t.bind_self();
+            self.gl.uniform1i(self.default_pipeline.get_extra_uniform(t.uniform_key.as_ref()).as_ref(), i as i32);
+        }
 
         self.gl.clear_color(0.0, 0.0, 0.0, 1.0);
         self.gl.clear(GL::COLOR_BUFFER_BIT);
@@ -192,27 +229,34 @@ impl Context {
             node.primitive.draw();
         }
 
+        let render_params = &self.render_params;
+
         // add new object
-        let triangles = self.obj.triangles;
-        let vertex_count = self.obj.vertex_count;
+        if render_params.multiple {
+            let triangles = self.obj.triangles;
+            let vertex_count = self.obj.vertex_count;
 
-        let mut rng = rand::thread_rng();
+            let mut rng = rand::thread_rng();
 
-        let mut obj_node = model::Node::new(model::Primitive::new(self.gl.clone(), &self.obj));
-        obj_node.set_x_y_z(rng.gen_range(-20.0, 20.0), rng.gen_range(-20.0, 20.0), -50.0);
-        self.nodes.push(obj_node);
+            let mut obj_node = model::Node::new(model::Primitive::new(self.gl.clone(), &self.obj));
 
-        self.triangles += triangles;
-        self.vertex_count += vertex_count;
+            obj_node.set_x_y_z(
+                rng.gen_range(render_params.min_max_x[0], render_params.min_max_x[1]),
+                rng.gen_range(render_params.min_max_y[0], render_params.min_max_y[1]),
+                rng.gen_range(render_params.min_max_z[0], render_params.min_max_z[1]),
+            );
+            self.nodes.push(obj_node);
+
+            self.triangles += triangles;
+            self.vertex_count += vertex_count;
+        }
 
         Ok(())
     }
 }
 
-fn create_default_program(gl: &WebGlRenderingContext) -> DefaultPipeline {
-    let vert_src = include_str!("../res/shader/cube.vert.glsl");
-    let frag_src = include_str!("../res/shader/cube.frag.glsl");
-    DefaultPipeline::new(gl, vert_src, frag_src)
+fn create_default_program(gl: &WebGlRenderingContext, shaders: JsShaders) -> DefaultPipeline {
+    DefaultPipeline::new(gl, shaders.vert_str.as_str(), shaders.frag_str.as_str())
 }
 
 fn get_gl_context(canvas: &HtmlCanvasElement) -> Result<GL, JsValue> {

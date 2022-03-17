@@ -1,6 +1,8 @@
 import * as wasmOpenGL from "wasm-opengl";
 import {getAgent, getGpuTier} from "./tracker";
 import GLBench from "./lib/gl-bench";
+import {SceneInit} from "wasm-opengl";
+import Utils from "./Utils";
 
 var program = null;
 
@@ -26,7 +28,34 @@ $(document).ready(() => {
         let source = await fetch('build/resources/obj/cube.obj');
         let obj_data = await source.text();
 
-        program = wasmOpenGL.Context.new("rust-gl", obj_data);
+        let vsSource = await fetch('build/resources/shader/cube.vert.glsl');
+        vsSource = await vsSource.text();
+
+        let fsSource = await fetch('build/resources/shader/cube.frag.glsl');
+        fsSource = await fsSource.text();
+
+        const images = await Utils.loadTextureImageUint8ArrayBuffers([
+            {id: 'tex_diffuse', url: 'build/resources/images/cube-diffuse.png'},
+            {id: 'tex_norm', url: 'build/resources/images/cube-normal.png'},
+        ]);
+
+        const shaders = {
+            vert_str: vsSource,
+            frag_str: fsSource,
+        };
+
+        const initParams = {
+            init_pos: [-20.0, 20.0, -50.0],
+            min_max_x: [-20.0, 20.0],
+            min_max_y: [-20.0, 20.0],
+            min_max_z: [-80.0, -50.0],
+            multiple: true
+        };
+
+        let scene = SceneInit.new("rust-gl", obj_data, shaders, images, initParams);
+
+        program = wasmOpenGL.Context.new(scene);
+
         bench = new GLBench(program.get_context(), {
             withoutUI: true,
             trackGPU: false,

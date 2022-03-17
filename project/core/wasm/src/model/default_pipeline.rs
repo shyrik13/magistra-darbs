@@ -1,12 +1,12 @@
 use web_sys::{WebGlRenderingContext as GL, WebGlUniformLocation};
 use crate::model::{program, Primitive};
+use std::collections::HashMap;
 
 pub struct DefaultPipeline {
     pub program: program::Program,
     pub perspective_loc: Option<WebGlUniformLocation>,
-    pub tex_diffuse_loc: Option<WebGlUniformLocation>,
-    pub tex_norm_loc: Option<WebGlUniformLocation>,
     pub model_view_loc: Option<WebGlUniformLocation>,
+    pub extra_uniforms: HashMap<String, Option<WebGlUniformLocation>>,
     pub vert_pos_loc: i32,
     pub vert_uv_loc: i32,
     pub vert_tang_loc: i32,
@@ -19,8 +19,6 @@ impl DefaultPipeline {
         program.bind();
 
         let perspective_loc = program.get_uniform_loc("perspective");
-        let tex_diffuse_loc = program.get_uniform_loc("tex_diffuse");
-        let tex_norm_loc = program.get_uniform_loc("tex_norm");
         let model_view_loc = program.get_uniform_loc("model_view");
 
         let vert_pos_loc = program.get_attrib_loc("vert_pos");
@@ -28,17 +26,26 @@ impl DefaultPipeline {
         let vert_tang_loc = program.get_attrib_loc("vert_tang");
         let vert_bitang_loc = program.get_attrib_loc("vert_bitang");
 
+        let extra_uniforms: HashMap<String, Option<WebGlUniformLocation>> = HashMap::new();
+
         Self {
             program,
             perspective_loc,
-            tex_diffuse_loc,
-            tex_norm_loc,
+            extra_uniforms,
             model_view_loc,
             vert_pos_loc,
             vert_uv_loc,
             vert_tang_loc,
             vert_bitang_loc
         }
+    }
+
+    pub fn get_extra_uniform(&mut self, key: &str) -> Option<WebGlUniformLocation> {
+        if !self.extra_uniforms.contains_key(key) {
+            self.extra_uniforms.insert(key.to_string(), self.program.get_uniform_loc(key));
+        }
+
+        Option::Some(self.extra_uniforms.get(key).unwrap().clone().unwrap())
     }
 
     pub fn bind(&self, primitive: &Primitive) {

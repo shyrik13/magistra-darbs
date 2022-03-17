@@ -104,6 +104,29 @@ class Utils {
         return await Promise.all(promises);
     }
 
+    /**
+     * imagesData = {
+     *     {id: uniform_id, url: image_path}
+     * }
+     *
+     * @param imagesData
+     * @return {Promise<unknown[]>}
+     */
+    static async loadTextureImageUint8ArrayBuffers(imagesData) {
+        const promises = await imagesData.map(data => {
+            return new Promise((resolve) => {
+                fetch(data.url).then(res => {
+                    res.arrayBuffer().then(arrayBuffer => {
+
+                        resolve({id: data.id, data: Array.from(new Uint8Array(arrayBuffer).values())});
+                    });
+                });
+            });
+        });
+
+        return await Promise.all(promises);
+    }
+
     static rotationModelXYZ(t, x, y, z) {
         const viewMatrix = mat4.create();
         let c = Math.cos(t);
