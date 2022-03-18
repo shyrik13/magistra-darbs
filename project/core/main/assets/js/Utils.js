@@ -2,7 +2,7 @@ import {vec2, vec3, mat4} from 'gl-matrix';
 
 class Utils {
 
-    static async createObjectFromFile(path) {
+    static async createObjectFromFile(source) {
         const obj = {
             vertices: [],
             uvs: [],
@@ -16,9 +16,6 @@ class Utils {
         let vArr = [[0.0, 0.0, 0.0]];
         let uvArr = [[0.0, 0.0]];
         let vnArr = [[0.0, 0.0, 0.0]];
-
-        let source = await fetch(path);
-        source = await source.text();
 
         const arr = source.split("\n");
 
@@ -91,13 +88,13 @@ class Utils {
         return obj;
     }
 
-    static async loadImages(urls) {
-        const promises = await urls.map(url => {
+    static async loadImages(imagesData) {
+        const promises = await imagesData.map(data => {
             return new Promise((resolve, reject) => {
                 let img = new Image()
-                img.onload = () => resolve(img);
+                img.onload = () => resolve({id: data.id, data: img});
                 img.onerror = reject;
-                img.src = url;
+                img.src = data.url;
             });
         });
 

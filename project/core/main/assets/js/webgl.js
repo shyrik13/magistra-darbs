@@ -28,7 +28,34 @@ $(document).ready(() => {
         selector.gpuModel.text(gpuTier.gpu);
         selector.agent.text(getAgent());
 
-        await program.init(canvas);
+        let source = await fetch('build/resources/obj/cube.obj');
+        let obj_data = await source.text();
+
+        let vsSource = await fetch('build/resources/shader/cube.vert.glsl');
+        vsSource = await vsSource.text();
+
+        let fsSource = await fetch('build/resources/shader/cube.frag.glsl');
+        fsSource = await fsSource.text();
+
+        const images = [
+            {id: 'tex_diffuse', url: 'build/resources/images/cube-diffuse.jpg'},
+            {id: 'tex_norm', url: 'build/resources/images/cube-normal.png'},
+        ];
+
+        const shaders = {
+            vert_str: vsSource,
+            frag_str: fsSource,
+        };
+
+        const initParams = {
+            init_pos: {x: -20.0, y: 20.0, z: -50.0},
+            min_max_x: {min: -20.0, max: 20.0},
+            min_max_y: {min: -20.0, max: 20.0},
+            min_max_z: {min: -80.0, max: -50.0},
+            multiple: true
+        };
+
+        await program.init(canvas, obj_data, shaders, images, initParams);
 
         bench = new GLBench(program.getContext(), {
             withoutUI: true,

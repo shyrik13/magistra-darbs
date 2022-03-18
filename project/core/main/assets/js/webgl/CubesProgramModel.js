@@ -21,6 +21,10 @@ class CubesProgramModel {
     cubeObj = {};
     textures = [];
 
+    TEXTURE_IDS = [];
+
+    initParams = {};
+
     gl = undefined;
     programInfo = undefined;
     buffers = undefined;
@@ -43,31 +47,22 @@ class CubesProgramModel {
         return this._instance;
     }
 
-    async init(canvas) {
+    async init(canvas, objData, shaders, imagesData, initParams) {
         this.gl = canvas.getContext('webgl');
 
         // If we don't have a GL context, give up now
-
         if (!this.gl) {
             alert('Unable to initialize WebGL. Your browser or machine may not support it.');
             return;
         }
 
-        // Vertex shader program
-        let vsSource = await fetch('build/resources/shader/cube.vert.glsl'); //fs.readFileSync("", "utf-8");
-        vsSource = await vsSource.text();
-
-        // Fragment shader program
-        let fsSource = await fetch('build/resources/shader/cube.frag.glsl'); //fs.readFileSync("./shader/triangle.frag.glsl", "utf-8");
-        fsSource = await fsSource.text();
-
-        this.cubeObj = await Utils.createObjectFromFile('build/resources/obj/cube.obj');
+        this.cubeObj = await Utils.createObjectFromFile(objData);
         this.objTriangles = this.cubeObj.triangles;
         this.objVertex = this.cubeObj.vertexCount;
 
         // Initialize a shader program; this is where all the lighting
         // for the vertices and so forth is established.
-        const shaderProgram = this.initShaderProgram(this.gl, vsSource, fsSource);
+        const shaderProgram = this.initShaderProgram(this.gl, shaders.vert_str, shaders.frag_str);
 
         // Collect all the info needed to use the shader program.
         // Look up which attribute our shader program is using
@@ -84,31 +79,26 @@ class CubesProgramModel {
             uniformLocations: {
                 perspectiveId: this.gl.getUniformLocation(shaderProgram, 'perspective'),
                 modelViewId: this.gl.getUniformLocation(shaderProgram, 'model_view'),
-                // modelNormMapId: this.gl.getUniformLocation(shaderProgram, 'norm_mtx'),
-                // modelProjMapId: this.gl.getUniformLocation(shaderProgram, 'proj_mtx'),
-                tNormId: this.gl.getUniformLocation(shaderProgram, 'tex_norm'),
-                tDiffId: this.gl.getUniformLocation(shaderProgram, 'tex_diffuse'),
+                extraUniforms: {}
             },
         };
 
-        const images = await Utils.loadImages([
-            'build/resources/images/cube-diffuse.jpg',
-            'build/resources/images/cube-normal.png'
-        ]);
+        const images = await Utils.loadImages(imagesData);
 
         this.bindScene(this.gl, this.programInfo);
-
         this.initTextures(this.gl, images);
 
         // Here's where we call the routine that builds all the
         // objects we'll be drawing.
         this.cubes.push({
             buffers: this.initBuffers(this.gl),
-            pos: {x: -20.0, y: 20.0, z: -50.0},
+            pos: initParams.init_pos,
             vertexCount: this.cubeObj.vertexCount,
         });
         this.triangles += this.objTriangles;
         this.vertex += this.objVertex;
+
+        this.initParams = initParams;
     }
 
     getSceneInfo() {
@@ -154,17 +144,25 @@ class CubesProgramModel {
             this.gl.drawArrays(this.gl.TRIANGLES, 0, obj.vertexCount);
         }
 
-        this.cubes.push({
-            buffers: this.initBuffers(this.gl),
-            // Utils.getRandomIntInclusive(-2000, 2000) => min -20, max 20
-            pos: {x: Utils.getRandomIntInclusive(-2000, 2000), y: Utils.getRandomIntInclusive(-2000, 2000), z: -50.0},
-            vertexCount: this.cubeObj.vertexCount
-        });
-        this.triangles += this.objTriangles;
-        this.vertex += this.objVertex;
+        if (this.initParams.multiple) {
+            this.cubes.push({
+                buffers: this.initBuffers(this.gl),
+                // Utils.getRandomIntInclusive(-2000, 2000) => min -20, max 20
+                pos: {
+                    x: Utils.getRandomIntInclusive(this.initParams.min_max_x.min * 100, this.initParams.min_max_x.max * 100),
+                    y: Utils.getRandomIntInclusive(this.initParams.min_max_y.min * 100, this.initParams.min_max_y.max * 100),
+                    z: Utils.getRandomIntInclusive(this.initParams.min_max_z.min * 100, this.initParams.min_max_z.max * 100)
+                },
+                vertexCount: this.cubeObj.vertexCount
+            });
+            this.triangles += this.objTriangles;
+            this.vertex += this.objVertex;
+        }
     }
 
     initTextures(gl, images = []) {
+        this.TEXTURE_IDS = [gl.TEXTURE0, gl.TEXTURE1];
+
         // TEXTURES
         this.textures = [];
         for (let i = 0; i < images.length; i++) {
@@ -178,10 +176,10 @@ class CubesProgramModel {
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
             // Upload the image into the texture.
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i].data);
 
             // add the texture to the array of textures.
-            this.textures.push(texture);
+            this.textures.push({id: images[i].id, texture: texture});
         }
     }
 
@@ -269,13 +267,17 @@ class CubesProgramModel {
         mat4.perspective(projMatrix, Utils.degsToRads(45.0), 4/3, 0.1, 100.0);
         gl.uniformMatrix4fv(this.programInfo.uniformLocations.perspectiveId, false, projMatrix);
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);
-        gl.uniform1i(this.programInfo.uniformLocations.tDiffId, 0);
+        // activate textures
+        for (let tid in this.textures) {
+            if (!this.textures[tid].id in this.programInfo.uniformLocations.extraUniforms) {
+                this.programInfo.uniformLocations.extraUniforms[this.textures[tid].id] =
+                    this.gl.getUniformLocation(this.programInfo.program, this.textures[tid].id)
+            }
 
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
-        gl.uniform1i(this.programInfo.uniformLocations.tNormId, 1);
+            gl.activeTexture(this.TEXTURE_IDS[tid]);
+            gl.bindTexture(gl.TEXTURE_2D, this.textures[tid].texture);
+            gl.uniform1i(this.programInfo.uniformLocations.extraUniforms[this.textures[tid].id], tid);
+        }
     }
 
     initShaderProgram(gl, vsSource, fsSource) {
