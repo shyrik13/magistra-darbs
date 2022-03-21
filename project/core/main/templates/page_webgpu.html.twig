@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% block meta %}
+    {# register new webgpu token at https://developer.chrome.com/origintrials/#/trials/active #}
+    <meta http-equiv="origin-trial" content="{{ app.request.server.get("CHROME_WEBGPU_KEY") }}"/>
+{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     {{ encore_entry_link_tags('webgpu') }}

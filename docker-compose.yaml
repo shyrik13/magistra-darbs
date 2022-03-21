@@ -30,6 +30,7 @@ services:
         ENV: ${ENV}
     ports:
       - ${HOST_IP}:80:80
+      - ${HOST_IP}:443:443
     volumes:
       - ${PROJECT_PATH_CORE}:/var/www/project/core:cached
       - ${NGINX_LOG_PATH}:/var/log/nginx
