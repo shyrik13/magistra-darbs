@@ -32,3 +32,6 @@ Tagad serveris nokonfigurēts uz localhost:3000
 Projektā būtu iespējams redzēt WASM + Rust + OpenGL sākotnējo testēšanas programmu <br>
 Projektā būtu iespējams redzēt WebGL sākotnējo testēšanas programmu <br>
 WebGPU un Wasm + Rust + Vulkan realizācijas pagaidām nav uzsāktas, jo ir nepieciešams izlasīt atbilstošo literatūru<br>
+
+
+Vulkan installation on Ubuntu: https://linuxconfig.org/install-and-test-vulkan-on-linux
