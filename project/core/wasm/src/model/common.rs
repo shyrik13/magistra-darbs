@@ -12,7 +12,7 @@ pub fn obj_file_data_to_vertex_vector_data(obj_file_data: &str) -> (Vec<f32>, Ve
     let mut vec_obj_tangents: Vec<f32> = Vec::new();
     let mut vec_obj_bitangent: Vec<f32> = Vec::new();
 
-    let mut triangles = 0;
+    let mut triangles_count = 0;
     let mut vertex_count = 0;
 
     // Dummy
@@ -25,6 +25,11 @@ pub fn obj_file_data_to_vertex_vector_data(obj_file_data: &str) -> (Vec<f32>, Ve
     for line in lines {
         // let line = line.unwrap();
         let vec_split: Vec<&str> = line.split_whitespace().collect();
+
+        if vec_split.len() == 0 {
+            continue;
+        }
+
         if vec_split[0] == "v" {
             let v1: f32 = vec_split[1].parse().unwrap();
             let v2: f32 = vec_split[2].parse().unwrap();
@@ -40,75 +45,95 @@ pub fn obj_file_data_to_vertex_vector_data(obj_file_data: &str) -> (Vec<f32>, Ve
             let v3: f32 = vec_split[3].parse().unwrap();
             vec_normals.push([v1, v2, v3]);
         } else if vec_split[0] == "f" {
-            triangles += 1;
 
-            let mut vs = vec![];
-            let mut uvs = vec![];
-            let mut temp_vec_vertex = vec![];
-
+            let mut v_points = vec![];
             for i in 1..vec_split.len() {
-                let vec_split: Vec<&str> = vec_split[i].split("/").collect();
+                if vec_split[i] == "\r" {
+                    continue;
+                }
 
-                let ind1: usize = vec_split[0].parse().unwrap();
-                let ind2: usize = vec_split[1].parse().unwrap();
-                let ind3: usize = vec_split[2].parse().unwrap();
-
-                vs.push(Vector3::new(vec_positions[ind1][0], vec_positions[ind1][1], vec_positions[ind1][2]));
-                uvs.push(Vector2::new(vec_uv[ind2][0], vec_uv[ind2][1]));
-
-                temp_vec_vertex.push((vec_positions[ind1], vec_uv[ind2], vec_normals[ind3]));
-
-                vertex_count += 1;
+                v_points.push(vec_split[i]);
             }
 
-            // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/#computing-the-tangents-and-bitangents
-            let delta_pos_1 = vs[1].sub(&vs[0]);
-            let delta_pos_2 = vs[2].sub(&vs[0]);
+            let mut index = 0;
+            let mut triangles = vec![];
+            // quads logic ABCD => (ABC, ACD)
+            while index + 2 != v_points.len() {
+                triangles.push([v_points[0], v_points[index+1], v_points[index+2]]);
+                index += 1;
+            }
 
-            let delta_uv_1 = uvs[1].sub(&uvs[0]);
-            let delta_uv_2 = uvs[2].sub(&uvs[0]);
+            for j in 0..triangles.len() {
+                triangles_count += 1;
 
-            let r = 1.0 / (&delta_uv_1.data[0] * &delta_uv_2.data[1] - &delta_uv_1.data[1] * &delta_uv_2.data[0]);
+                let mut vs = vec![];
+                let mut uvs = vec![];
+                let mut temp_vec_vertex = vec![];
 
-            // delta_pos_1 * delta_uv_2.y
-            let tangent_mul_1 = delta_pos_1.mul(delta_uv_2.data[1].to_owned());
-            // delta_pos_2 * delta_uv_1.y
-            let tangent_mul_2 = delta_pos_2.mul(delta_uv_1.data[1].to_owned());
-            // (delta_pos_1 * delta_uv_2.y - delta_pos_2 * delta_uv_1.y) * r
-            let tangent_sub = tangent_mul_1.sub(tangent_mul_2);
-            let res = tangent_sub.mul(r.to_owned());
-            let tangent = [res.data[0], res.data[1], res.data[2]];
+                for k in 0..triangles[j].len() {
+                    let vec_split: Vec<&str> = triangles[j][k].split("/").collect();
 
-            // delta_pos_2 * delta_uv_1.x
-            let bitangent_mul_1 = delta_pos_2.mul(delta_uv_1.data[0].to_owned());
-            // delta_pos_1 * delta_uv_2.x
-            let bitangent_mul_2 = delta_pos_1.mul(delta_uv_2.data[0].to_owned());
-            // (delta_pos_2 * delta_uv_1.x - delta_pos_1 * delta_uv_2.x) * r
-            let bitangent_sub = bitangent_mul_1.sub(bitangent_mul_2);
-            let res = bitangent_sub.mul(r.to_owned());
-            let bitangent = [res.data[0], res.data[1], res.data[2]];
+                    let ind1: usize = vec_split[0].parse().unwrap();
+                    let ind2: usize = vec_split[1].parse().unwrap();
+                    let ind3: usize = vec_split[2].parse().unwrap();
 
-            for i in 0..temp_vec_vertex.len() {
-                let temp_vertex = temp_vec_vertex[i];
+                    vs.push(Vector3::new(vec_positions[ind1][0], vec_positions[ind1][1], vec_positions[ind1][2]));
+                    uvs.push(Vector2::new(vec_uv[ind2][0], vec_uv[ind2][1]));
 
-                vec_obj_vertices.push(temp_vertex.0[0]);
-                vec_obj_vertices.push(temp_vertex.0[1]);
-                vec_obj_vertices.push(temp_vertex.0[2]);
+                    temp_vec_vertex.push((vec_positions[ind1], vec_uv[ind2], vec_normals[ind3]));
 
-                vec_obj_uvs.push(temp_vertex.1[0]);
-                vec_obj_uvs.push(temp_vertex.1[1]);
+                    vertex_count += 1;
+                }
 
-                vec_obj_tangents.push(tangent[0]);
-                vec_obj_tangents.push(tangent[1]);
-                vec_obj_tangents.push(tangent[2]);
+                // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/#computing-the-tangents-and-bitangents
+                let delta_pos_1 = vs[1].sub(&vs[0]);
+                let delta_pos_2 = vs[2].sub(&vs[0]);
 
-                vec_obj_bitangent.push(bitangent[0]);
-                vec_obj_bitangent.push(bitangent[1]);
-                vec_obj_bitangent.push(bitangent[2]);
+                let delta_uv_1 = uvs[1].sub(&uvs[0]);
+                let delta_uv_2 = uvs[2].sub(&uvs[0]);
+
+                let r = 1.0 / (&delta_uv_1.data[0] * &delta_uv_2.data[1] - &delta_uv_1.data[1] * &delta_uv_2.data[0]);
+
+                // delta_pos_1 * delta_uv_2.y
+                let tangent_mul_1 = delta_pos_1.mul(delta_uv_2.data[1].to_owned());
+                // delta_pos_2 * delta_uv_1.y
+                let tangent_mul_2 = delta_pos_2.mul(delta_uv_1.data[1].to_owned());
+                // (delta_pos_1 * delta_uv_2.y - delta_pos_2 * delta_uv_1.y) * r
+                let tangent_sub = tangent_mul_1.sub(tangent_mul_2);
+                let res = tangent_sub.mul(r.to_owned());
+                let tangent = [res.data[0], res.data[1], res.data[2]];
+
+                // delta_pos_2 * delta_uv_1.x
+                let bitangent_mul_1 = delta_pos_2.mul(delta_uv_1.data[0].to_owned());
+                // delta_pos_1 * delta_uv_2.x
+                let bitangent_mul_2 = delta_pos_1.mul(delta_uv_2.data[0].to_owned());
+                // (delta_pos_2 * delta_uv_1.x - delta_pos_1 * delta_uv_2.x) * r
+                let bitangent_sub = bitangent_mul_1.sub(bitangent_mul_2);
+                let res = bitangent_sub.mul(r.to_owned());
+                let bitangent = [res.data[0], res.data[1], res.data[2]];
+
+                for i in 0..temp_vec_vertex.len() {
+                    let temp_vertex = temp_vec_vertex[i];
+
+                    vec_obj_vertices.push(temp_vertex.0[0]);
+                    vec_obj_vertices.push(temp_vertex.0[1]);
+                    vec_obj_vertices.push(temp_vertex.0[2]);
+
+                    vec_obj_uvs.push(temp_vertex.1[0]);
+                    vec_obj_uvs.push(temp_vertex.1[1]);
+
+                    vec_obj_tangents.push(tangent[0]);
+                    vec_obj_tangents.push(tangent[1]);
+                    vec_obj_tangents.push(tangent[2]);
+
+                    vec_obj_bitangent.push(bitangent[0]);
+                    vec_obj_bitangent.push(bitangent[1]);
+                    vec_obj_bitangent.push(bitangent[2]);
+                }
             }
 
         }
     }
 
-    (vec_obj_vertices, vec_obj_uvs, vec_obj_tangents, vec_obj_bitangent, triangles, vertex_count)
+    (vec_obj_vertices, vec_obj_uvs, vec_obj_tangents, vec_obj_bitangent, triangles_count, vertex_count)
 }
