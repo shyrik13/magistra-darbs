@@ -28,10 +28,10 @@ $(document).ready(() => {
         let source = await fetch('build/resources/obj/cube.obj');
         let obj_data = await source.text();
 
-        let vsSource = await fetch('build/resources/shader/cube.vert.glsl');
+        let vsSource = await fetch('build/resources/shader/obj.vert.glsl');
         vsSource = await vsSource.text();
 
-        let fsSource = await fetch('build/resources/shader/cube.frag.glsl');
+        let fsSource = await fetch('build/resources/shader/obj.frag.glsl');
         fsSource = await fsSource.text();
 
         const images = await Utils.loadTextureImageUint8ArrayBuffers([
