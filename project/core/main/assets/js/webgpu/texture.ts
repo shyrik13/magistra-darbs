@@ -144,14 +144,14 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
     const renderPassDescription = {
         colorAttachments: [{
             view: textureView,
-            loadOp: { r: 0.2, g: 0.247, b: 0.314, a: 1.0 }, //background color
+            clearValue: { r: 0.2, g: 0.247, b: 0.314, a: 1.0 }, //background color
             storeOp: 'store'
         }],
         depthStencilAttachment: {
             view: depthTexture.createView(),
-            depthLoadOp: 1.0,
+            depthClearValue: 1.0,
             depthStoreOp: "store",
-            stencilLoadOp: 0,
+            stencilClearValue: 0,
             stencilStoreOp: "store"
         }
     };
