@@ -84,7 +84,6 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
     let eyePosition = new Float32Array(vp.cameraOption.eye);
     let lightPosition = eyePosition;
 
-    console.log(vp.viewProjectionMatrix);
     // create uniform buffer and layout
     const vertexUniformBuffer = device.createBuffer({
         size: 192,
@@ -191,9 +190,7 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
         renderPass.draw(numberOfVertices);
         renderPass.end();
 
-        console.log('after end');
         device.queue.submit([commandEncoder.finish()]);
-        console.log('after submit');
     }
 
     CreateAnimation(draw, rotation, isAnimation);

@@ -10,7 +10,7 @@ export const CreateAnimation = (draw:any, rotation:vec3 = vec3.fromValues(0,0,0)
             rotation = [0, 0, 0];
         }
         draw();
-        requestAnimationFrame(step);
+        // requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
 }
