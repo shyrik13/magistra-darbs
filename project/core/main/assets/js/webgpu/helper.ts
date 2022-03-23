@@ -98,6 +98,10 @@ export const InitGPU = async () => {
     const device = await adapter?.requestDevice() as GPUDevice;
     const context = canvas.getContext('webgpu') as GPUCanvasContext;
 
+    device.lost.then((info) => {
+        console.error("Device was lost.", info);
+    });
+
     const devicePixelRatio = window.devicePixelRatio || 1;
     const size = [
         canvas.clientWidth * devicePixelRatio,
