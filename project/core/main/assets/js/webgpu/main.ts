@@ -8,7 +8,7 @@ const CreateShape = async (ul:number, vl:number, li:LightInputs, textureFile:str
     await CreateShapeWithTexture(data.positions, data.normals, data.uvs, textureFile, addressModeU, addressModeV, li, isAnimation);
 }
 
-let textureFile = 'cube-diffuse.png';
+let textureFile = 'brick.png';
 let addressModeU = 'repeat' as GPUAddressMode;
 let addressModeV = 'repeat' as GPUAddressMode;
 let li:LightInputs = {};
