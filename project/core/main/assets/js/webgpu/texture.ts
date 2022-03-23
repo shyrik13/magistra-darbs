@@ -191,7 +191,9 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
         renderPass.draw(numberOfVertices);
         renderPass.end();
 
+        console.log('after end');
         device.queue.submit([commandEncoder.finish()]);
+        console.log('after submit');
     }
 
     CreateAnimation(draw, rotation, isAnimation);
