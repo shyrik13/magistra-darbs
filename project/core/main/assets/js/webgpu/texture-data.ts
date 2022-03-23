@@ -24,12 +24,6 @@ export const GetTexture = async(device:GPUDevice, imageName:string,
                GPUTextureUsage.RENDER_ATTACHMENT
     });
 
-    let queue:GPUQueue = device.queue;
-    console.log(queue);
-    console.log(device.queue);
-    console.log(device);
-    console.log(device.queue);
-
     device.queue.copyExternalImageToTexture(
         { source: imageBitmap },
         { texture: texture },
