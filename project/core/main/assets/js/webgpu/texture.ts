@@ -144,14 +144,14 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
     const renderPassDescription = {
         colorAttachments: [{
             view: textureView,
-            loadValue: { r: 0.2, g: 0.247, b: 0.314, a: 1.0 }, //background color
+            loadOp: { r: 0.2, g: 0.247, b: 0.314, a: 1.0 }, //background color
             storeOp: 'store'
         }],
         depthStencilAttachment: {
             view: depthTexture.createView(),
-            depthLoadValue: 1.0,
+            depthLoadOp: 1.0,
             depthStoreOp: "store",
-            stencilLoadValue: 0,
+            stencilLoadOp: 0,
             stencilStoreOp: "store"
         }
     };
@@ -188,7 +188,7 @@ export const CreateShapeWithTexture = async (vertexData: Float32Array, normalDat
         renderPass.setVertexBuffer(2, uvBuffer);
         renderPass.setBindGroup(0, uniformBindGroup);       
         renderPass.draw(numberOfVertices);
-        renderPass.endPass();
+        renderPass.end();
 
         device.queue.submit([commandEncoder.finish()]);
     }
