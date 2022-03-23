@@ -103,7 +103,7 @@ export const InitGPU = async () => {
         canvas.clientWidth * devicePixelRatio,
         canvas.clientHeight * devicePixelRatio,
     ];
-    console.log(adapter);
+
     const format = context.getPreferredFormat(adapter!);
 
     context.configure({
