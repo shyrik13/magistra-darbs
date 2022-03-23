@@ -25,7 +25,7 @@ export const Shaders = (li: LightInputs) => {
             modelMatrix : mat4x4<f32>;               
             normalMatrix : mat4x4<f32>;            
         };
-        @binding(0), @group(0) var<uniform> uniforms : Uniforms;
+        @binding(0) var<uniform> uniforms : Uniforms;
 
         struct Input {
             @location(0) position : vec4<f32>;
@@ -56,9 +56,9 @@ export const Shaders = (li: LightInputs) => {
             lightPosition : vec4<f32>;   
             eyePosition : vec4<f32>;
         };
-        @binding(1), group(0) var<uniform> uniforms : Uniforms;
-        @binding(2), group(0) var textureSampler : sampler;
-        @binding(3), group(0) var textureData : texture_2d<f32>;
+        @binding(1) var<uniform> uniforms : Uniforms;
+        @binding(2) var textureSampler : sampler;
+        @binding(3) var textureData : texture_2d<f32>;
         
         struct Input {
             @location(0) vPosition : vec4<f32>;
