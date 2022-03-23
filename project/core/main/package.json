@@ -16,10 +16,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "3d-view-controls": "^2.2.2",
+        "@types/jquery": "^3.5.14",
         "@webgpu/types": "^0.1.13",
         "detect-gpu": "^4.0.12",
         "file-loader": "^6.2.0",
         "gl-matrix": "^3.4.3",
+        "jquery": "^3.6.0",
         "raw-loader": "^4.0.2",
         "ts-loader": "^9.2.7",
         "typescript": "^4.6.2",
