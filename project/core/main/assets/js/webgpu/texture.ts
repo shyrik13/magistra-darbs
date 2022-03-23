@@ -4,10 +4,22 @@ import { GetTexture } from './texture-data';
 import { vec3, mat4 } from 'gl-matrix';
 const createCamera = require('3d-view-controls');
 
+let gpu = null;
+let device = null;
+
+async function initWebGpu() {
+    gpu = await InitGPU();
+    device = gpu.device;
+}
+
 export const CreateShapeWithTexture = async (vertexData: Float32Array, normalData: Float32Array, uvData: Float32Array, 
     textureFile = 'brick.png', addressModeU = 'repeat',addressModeV = 'repeat', lightInputs:LightInputs = {}, isAnimation = true) => {
-    const gpu = await InitGPU();
-    const device = gpu.device;
+    await initWebGpu();
+
+    device.lost.then((info) => {
+        console.error("Device was lost.", info);
+        initWebGpu();
+    });
 
     // create vertex buffers
     const numberOfVertices = vertexData.length/3;
