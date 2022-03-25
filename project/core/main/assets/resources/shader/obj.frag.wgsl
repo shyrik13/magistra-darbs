@@ -13,19 +13,6 @@ struct Input {
     [[location(2)]] vUV : vec2<f32>;
 };
 
-//[[stage(fragment)]]
-//fn main(input: Input) -> [[location(0)]] vec4<f32> {
-//    let surfaceColor:vec3<f32> = (textureSample(textureData, textureSampler, input.vUV)).rgb;
-//    let normal:vec3<f32> = normalize(input.vNormal);
-//    let eyeVec:vec3<f32> = normalize(uniforms.eyePosition.xyz - input.vPosition);
-//    let incidentVec:vec3<f32> = normalize(input.vPosition - uniforms.lightPosition.xyz);
-//    let lightVec:vec3<f32> = -incidentVec;
-//    let diffuse:f32 = max(dot(lightVec, normal), 0.0);
-//    let highlight:f32 = pow(max(dot(eyeVec, reflect(incidentVec, normal)), 0.0), 100.0);
-//    let ambient:f32 = 0.1;
-//    return vec4<f32>(surfaceColor * (diffuse + highlight + ambient), 1.0);
-//}
-
 fn cotangent_frame(normal: vec3<f32>, pos: vec3<f32>, uv: vec2<f32>) -> mat3x3<f32> {
     let dp1:vec3<f32> = dpdx(pos);
     let dp2:vec3<f32> = dpdy(pos);
@@ -43,13 +30,13 @@ fn cotangent_frame(normal: vec3<f32>, pos: vec3<f32>, uv: vec2<f32>) -> mat3x3<f
 fn main(input: Input) -> [[location(0)]] vec4<f32> {
     let specular_color:vec3<f32> = vec3<f32>(1.0, 1.0, 1.0);
     let diffuse_color:vec3<f32> = (textureSample(textureDiffData, textureSampler, input.vUV)).rgb;
-    let ambient_color:vec3<f32> = diffuse_color * 0.1;
+    let ambient_color:vec3<f32> = diffuse_color * 0.3;
 
     let normal_map:vec3<f32> = (textureSample(textureNormData, textureSampler, input.vUV)).rgb;
     let tbn:mat3x3<f32> = cotangent_frame(input.vNormal, input.vPosition, input.vUV);
     let real_normal:vec3<f32> = normalize(tbn * (normal_map * 2.0 - 1.0));
 
-    let diffuse:f32 = max(dot(normalize(real_normal), normalize(uniforms.lightPosition.xyz)), 0.2);
+    let diffuse:f32 = max(dot(normalize(real_normal), normalize(uniforms.lightPosition.xyz)), 0.1);
 
     let camera_dir:vec3<f32> = normalize(uniforms.eyePosition.xyz - input.vPosition);
     let half_direction:vec3<f32> = normalize(normalize(uniforms.lightPosition.xyz) + camera_dir);

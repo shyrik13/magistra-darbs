@@ -1,4 +1,4 @@
-import init from './webgpu/main';
+import init, {draw, getContext, getSceneInfo} from './webgpu/main';
 import {getAgent, getGpuTier} from "./tracker";
 import GLBench from "./lib/gl-bench";
 
@@ -15,7 +15,13 @@ $(document).ready(() => {
         sceneTriangles: $('#scene-triangles'),
     };
 
+    let bench;
+
     (async () => {
+        const gpuTier = await getGpuTier();
+        selector.gpuModel.text(gpuTier.gpu);
+        selector.agent.text(getAgent());
+
         let source = await fetch('build/resources/obj/cube.obj');
         let obj_data = await source.text();
 
@@ -38,15 +44,42 @@ $(document).ready(() => {
         const initParams = {
             init_pos: {x: -20.0, y: 20.0, z: -50.0},
             min_max_x: {min: -20.0, max: 20.0},
-            min_max_y: {min: -20.0, max: 20.0},
+            min_max_y: {min: -18.0, max: 18.0},
             min_max_z: {min: -80.0, max: -50.0},
             multiple: true
         };
 
         const canvas = document.querySelector('#webgpu-canvas');
-        init(canvas, obj_data, shaders, images, initParams);
+        await init(canvas, obj_data, shaders, images, initParams);
+
+        bench = new GLBench(getContext(), {
+            withoutUI: true,
+            trackGPU: false,
+            // chartHz: 5,
+            // chartLen: 5,
+            paramLogger: (i, cpu, gpu, mem, fps, totalTime, frameId, sceneInfo) => {
+                selector.cpu.text(`${cpu.toFixed(2)} %`);
+                selector.gpu.text(`${gpu.toFixed(2)} %`);
+                selector.fps.text(fps.toFixed(1));
+                selector.heap.text(`${mem.toFixed(8)} MB`);
+                selector.sceneVertex.text(sceneInfo.vertex);
+                selector.sceneTriangles.text(sceneInfo.triangles);
+            },
+            chartLogger: (i, chart, circularId) => {
+                // console.log('chart circular buffer=', chart)
+            },
+        });
+
+        requestAnimationFrame(loop);
     })();
 
+    const loop = (now) => {
+        bench.begin();
+        draw();
+        bench.end();
+        bench.nextFrame(now, getSceneInfo());
+        requestAnimationFrame(loop);
+    }
 });
 
 // $(document).ready(() => {
