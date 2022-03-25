@@ -7,9 +7,9 @@ const ONES = [1, 1, 1];
 
 class Utils {
 
-    static async createObjectFromFile(source) {
+    static async createObjectFromFile(source, asFloat32Array = false) {
         const obj = {
-            vertices: [],
+            positions: [],
             uvs: [],
             normals: [],
             tangents: [],
@@ -67,7 +67,7 @@ class Utils {
                         let vp = vArr[parseInt(n_split[0])];
                         let uvp = uvArr[parseInt(n_split[1])];
 
-                        obj.vertices.push(...vp);
+                        obj.positions.push(...vp);
                         obj.uvs.push(...uvp);
                         obj.normals.push(...vnArr[parseInt(n_split[2])]);
 
@@ -108,6 +108,14 @@ class Utils {
                     }
                 }
             }
+        }
+
+        if (asFloat32Array) {
+            obj.positions = new Float32Array(obj.positions);
+            obj.uvs = new Float32Array(obj.uvs);
+            obj.normals = new Float32Array(obj.normals);
+            obj.tangents = new Float32Array(obj.tangents);
+            obj.bitangents = new Float32Array(obj.tangents);
         }
 
         return obj;

@@ -186,7 +186,7 @@ class CubesProgramModel {
     initBuffers(gl) {
         const positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.vertices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.cubeObj.positions), gl.STATIC_DRAW);
 
         const uvsBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, uvsBuffer);

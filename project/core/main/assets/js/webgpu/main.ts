@@ -1,8 +1,9 @@
 import {mat4} from 'gl-matrix';
 import Utils from "../Utils";
 
+let objects = [];
 
-export default async function init() {
+export default async function init(canvas, objData, shaders, images, initParams) {
 
     let translateMat = mat4.create();
     let rotateXMat = mat4.create();
@@ -34,12 +35,15 @@ export default async function init() {
     // texture image
     //////////////////////////////////////////
 
-    const img = document.createElement("img");
-    img.src = "build/resources/images/cube-diffuse.png";
+    const imgDiff = document.createElement("img");
+    //const imgNorm = document.createElement("img");
+    imgDiff.src = images.diffuse_url;
+    //imgNorm.src = images.normal_url;
 
     const [adapter] = await Promise.all([
         navigator.gpu.requestAdapter(),
-        img.decode()
+        imgDiff.decode(),
+        //imgNorm.decode(),
     ]);
 
     ////////////////////////////////////
@@ -48,7 +52,6 @@ export default async function init() {
 
     const device = await adapter.requestDevice();
 
-    const canvas = document.getElementById("webgpu-canvas");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -69,21 +72,21 @@ export default async function init() {
     });
 
     const texture = device.createTexture({
-        size: [img.width, img.height, 1],
+        size: [imgDiff.width, imgDiff.height, 1],
         format: "rgba8unorm",
         usage: GPUTextureUsage.SAMPLED | GPUTextureUsage.COPY_DST | GPUTextureUsage.TEXTURE_BINDING
     });
 
-    const textureData = Utils.getImageData(img, textureDataCanvas, textureDataCtx);
+    const textureData = Utils.getImageData(imgDiff, textureDataCanvas, textureDataCtx);
 
     if (typeof device.queue.writeTexture === "function") {
         device.queue.writeTexture(
             { texture },
             textureData,
-            { bytesPerRow: img.width * 4 },
+            { bytesPerRow: imgDiff.width * 4 },
             [
-                img.width,
-                img.height,
+                imgDiff.width,
+                imgDiff.height,
                 1
             ]
         );
@@ -99,13 +102,13 @@ export default async function init() {
         const textureLoadEncoder = device.createCommandEncoder();
         textureLoadEncoder.copyBufferToTexture({
             buffer: textureDataBuffer,
-            bytesPerRow: img.width * 4,
-            imageHeight: img.height
+            bytesPerRow: imgDiff.width * 4,
+            imageHeight: imgDiff.height
         }, {
             texture,
         }, [
-            img.width,
-            img.height,
+            imgDiff.width,
+            imgDiff.height,
             1
         ]);
 
@@ -116,42 +119,48 @@ export default async function init() {
     // Create vertex buffers and load data
     ////////////////////////////////////////
 
-    const cubeData = Utils.createCube();
-    const numVertices = cubeData.positions.length / 3;
+    const dataObj = await Utils.createObjectFromFile(objData, true);
+
+    const numVertices = dataObj.vertexCount;
 
     const positionBuffer = device.createBuffer({
-        size: cubeData.positions.byteLength,
+        size: dataObj.positions.byteLength,
         usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
     });
     const normalBuffer = device.createBuffer({
-        size: cubeData.normals.byteLength,
+        size: dataObj.normals.byteLength,
         usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
     });
     const uvBuffer = device.createBuffer({
-        size: cubeData.uvs.byteLength,
+        size: dataObj.uvs.byteLength,
         usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST
     });
 
-    device.queue.writeBuffer(positionBuffer, 0, cubeData.positions);
-    device.queue.writeBuffer(normalBuffer, 0, cubeData.normals);
-    device.queue.writeBuffer(uvBuffer, 0, cubeData.uvs);
+    device.queue.writeBuffer(positionBuffer, 0, dataObj.positions);
+    device.queue.writeBuffer(normalBuffer, 0, dataObj.normals);
+    device.queue.writeBuffer(uvBuffer, 0, dataObj.uvs);
 
     /////////////////
     // Uniform data
     /////////////////
 
-    const eyePosition = new Float32Array([1, 1, 1]);
-    const lightPosition = new Float32Array([1, 1, 1]);
+    const eyePosition = new Float32Array([0, 0, 0]);
+    const lightPosition = new Float32Array([-1, 1, 0]);
 
     const projectionMatrix = mat4.create();
     const viewMatrix = mat4.create();
-    const modelMatrix = mat4.create();
+    const modelMatrix = mat4.fromValues(
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, -30, 1
+    );
+
     const viewProjectionMatrix = mat4.create();
     const mvpMatrix = mat4.create();
     const rotation = [0, 0, 0];
-
-    mat4.perspective(projectionMatrix, Math.PI / 2, canvas.width / canvas.height, 0.1, 10.0)
-    mat4.lookAt(viewMatrix, [1, 1, 1], [0, 0, 0], [0, 1, 0]);
+    mat4.perspective(projectionMatrix, Utils.degsToRads(45.0), canvas.width / canvas.height, 0.1, 100.0)
+    mat4.lookAt(viewMatrix, eyePosition, [0, 0, 0], [0, 1, 0]);
     mat4.multiply(viewProjectionMatrix, projectionMatrix, viewMatrix);
 
     /////////////////////////////////////////////
@@ -235,69 +244,12 @@ export default async function init() {
     ///////////////////////////
     // Create render pipeline
     ///////////////////////////
-    const vs = `
-        struct Uniforms {
-        worldMatrix : mat4x4<f32>;
-        viewProjectionMatrix : mat4x4<f32>;
-        };
-        [[binding(0), group(0)]] var<uniform> uniforms : Uniforms;
-        
-        struct Output {
-        [[builtin(position)]] Position : vec4<f32>;
-        [[location(0)]] vPosition : vec3<f32>;
-        [[location(1)]] vNormal : vec3<f32>;
-        [[location(2)]] vUV : vec2<f32>;
-        };
-        
-        [[stage(vertex)]]
-        fn main([[location(0)]] position: vec4<f32>, [[location(1)]] normal: vec3<f32>, [[location(2)]] uv: vec2<f32>) -> Output {
-        var output: Output;
-        
-        let worldPosition:vec4<f32> = uniforms.worldMatrix * position;
-        output.vPosition = worldPosition.xyz;
-        let v4Normal:vec4<f32> = vec4<f32>(normal.x, normal.y, normal.z, 1.);
-        output.vNormal = vec4<f32>(uniforms.worldMatrix * v4Normal).xyz;
-        output.vUV = uv;
-        output.Position = uniforms.viewProjectionMatrix * worldPosition;
-        
-        return output;
-        }
-    `.trim();
-
-    const fs = `
-        struct Uniforms {
-            eyePosition : vec4<f32>;
-            lightPosition : vec4<f32>;
-        };
-        [[binding(1), group(0)]] var<uniform> uniforms : Uniforms;
-        [[binding(2), group(0)]] var textureSampler : sampler;
-        [[binding(3), group(0)]] var textureData : texture_2d<f32>;
-        
-        struct Input {
-            [[location(0)]] vPosition : vec3<f32>;
-            [[location(1)]] vNormal : vec3<f32>;
-            [[location(2)]] vUV : vec2<f32>;
-        };
-        
-        [[stage(fragment)]]
-        fn main(input: Input) -> [[location(0)]] vec4<f32> {
-            let surfaceColor:vec3<f32> = (textureSample(textureData, textureSampler, input.vUV)).rgb;
-            let normal:vec3<f32> = normalize(input.vNormal);
-            let eyeVec:vec3<f32> = normalize(uniforms.eyePosition.xyz - input.vPosition);
-            let incidentVec:vec3<f32> = normalize(input.vPosition - uniforms.lightPosition.xyz);
-            let lightVec:vec3<f32> = -incidentVec;
-            let diffuse:f32 = max(dot(lightVec, normal), 0.0);
-            let highlight:f32 = pow(max(dot(eyeVec, reflect(incidentVec, normal)), 0.0), 100.0);
-            let ambient:f32 = 0.1;
-            return vec4<f32>(surfaceColor * (diffuse + highlight + ambient), 1.0);
-        }
-    `.trim();
 
     const pipeline = device.createRenderPipeline({
         layout: device.createPipelineLayout({bindGroupLayouts: [sceneUniformBindGroupLayout]}),
         vertex: {
             module: device.createShaderModule({
-                code: vs
+                code: shaders.vert_str
             }),
             entryPoint: "main",
             buffers: [
@@ -329,7 +281,7 @@ export default async function init() {
         },
         fragment: {
             module: device.createShaderModule({
-                code: fs
+                code: shaders.frag_str
             }),
             entryPoint: "main",
             targets: [{
@@ -377,7 +329,8 @@ export default async function init() {
 
         rotation[0] += 0.01;
         rotation[2] += 0.005;
-        Utils.xformMatrix(modelMatrix, null, rotation, null, translateMat, rotateXMat, rotateYMat, rotateZMat, scaleMat);
+
+        Utils.xformMatrix(modelMatrix, [0, 0, -10], rotation, null, translateMat, rotateXMat, rotateYMat, rotateZMat, scaleMat);
 
         device.queue.writeBuffer(vertexUniformBuffer, 0, modelMatrix);
 
