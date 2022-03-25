@@ -26,8 +26,11 @@ export default async function init(canvas, objData, shaders, images, initParams)
         throw new Error("WebGPU not supported");
     }
 
-    let textureDataCanvas = document.createElement("canvas");
-    let textureDataCtx = textureDataCanvas.getContext("2d");
+    let textureDiffDataCanvas = document.createElement("canvas");
+    let textureDiffDataCtx = textureDiffDataCanvas.getContext("2d");
+
+    let textureNormDataCanvas = document.createElement("canvas");
+    let textureNormDataCtx = textureNormDataCanvas.getContext("2d");
 
     //////////////////////////////////////////
     // Set up WebGPU adapter
@@ -36,14 +39,14 @@ export default async function init(canvas, objData, shaders, images, initParams)
     //////////////////////////////////////////
 
     const imgDiff = document.createElement("img");
-    //const imgNorm = document.createElement("img");
+    const imgNorm = document.createElement("img");
     imgDiff.src = images.diffuse_url;
-    //imgNorm.src = images.normal_url;
+    imgNorm.src = images.normal_url;
 
     const [adapter] = await Promise.all([
         navigator.gpu.requestAdapter(),
         imgDiff.decode(),
-        //imgNorm.decode(),
+        imgNorm.decode()
     ]);
 
     ////////////////////////////////////
@@ -71,18 +74,26 @@ export default async function init(canvas, objData, shaders, images, initParams)
         magFilter: "linear"
     });
 
-    const texture = device.createTexture({
+    const textureDiff = device.createTexture({
         size: [imgDiff.width, imgDiff.height, 1],
         format: "rgba8unorm",
         usage: GPUTextureUsage.SAMPLED | GPUTextureUsage.COPY_DST | GPUTextureUsage.TEXTURE_BINDING
     });
 
-    const textureData = Utils.getImageData(imgDiff, textureDataCanvas, textureDataCtx);
+    const textureNorm = device.createTexture({
+        size: [imgNorm.width, imgNorm.height, 1],
+        format: "rgba8unorm",
+        usage: GPUTextureUsage.SAMPLED | GPUTextureUsage.COPY_DST | GPUTextureUsage.TEXTURE_BINDING
+    });
+
+    const textureDiffData = Utils.getImageData(imgDiff, textureDiffDataCanvas, textureDiffDataCtx);
+    const textureNormData = Utils.getImageData(imgNorm, textureNormDataCanvas, textureNormDataCtx);
 
     if (typeof device.queue.writeTexture === "function") {
+        // Diff texture
         device.queue.writeTexture(
-            { texture },
-            textureData,
+            { texture: textureDiff },
+            textureDiffData,
             { bytesPerRow: imgDiff.width * 4 },
             [
                 imgDiff.width,
@@ -90,29 +101,66 @@ export default async function init(canvas, objData, shaders, images, initParams)
                 1
             ]
         );
+
+        // Norm texture
+        device.queue.writeTexture(
+            { texture: textureNorm },
+            textureNormData,
+            { bytesPerRow: imgNorm.width * 4 },
+            [
+                imgNorm.width,
+                imgNorm.height,
+                1
+            ]
+        );
     } else {
+        // Diff texture
         // NOTE: Fallback until Queue.writeTexture is implemented.
-        const textureDataBuffer = device.createBuffer({
-            size: textureData.byteLength,
+        const textureDiffDataBuffer = device.createBuffer({
+            size: textureDiffData.byteLength,
             usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
         });
 
-        device.queue.writeBuffer(textureDataBuffer, 0, textureData);
+        device.queue.writeBuffer(textureDiffDataBuffer, 0, textureDiffData);
 
-        const textureLoadEncoder = device.createCommandEncoder();
-        textureLoadEncoder.copyBufferToTexture({
-            buffer: textureDataBuffer,
+        const textureDiffLoadEncoder = device.createCommandEncoder();
+        textureDiffLoadEncoder.copyBufferToTexture({
+            buffer: textureDiffDataBuffer,
             bytesPerRow: imgDiff.width * 4,
             imageHeight: imgDiff.height
         }, {
-            texture,
+            textureDiff,
         }, [
             imgDiff.width,
             imgDiff.height,
             1
         ]);
 
-        device.queue.submit([textureLoadEncoder.finish()]);
+        device.queue.submit([textureDiffLoadEncoder.finish()]);
+
+        // Norm texture
+        // NOTE: Fallback until Queue.writeTexture is implemented.
+        const textureNormDataBuffer = device.createBuffer({
+            size: textureNormData.byteLength,
+            usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC
+        });
+
+        device.queue.writeBuffer(textureNormDataBuffer, 0, textureNormData);
+
+        const textureNormLoadEncoder = device.createCommandEncoder();
+        textureNormLoadEncoder.copyBufferToTexture({
+            buffer: textureNormDataBuffer,
+            bytesPerRow: imgNorm.width * 4,
+            imageHeight: imgNorm.height
+        }, {
+            textureNorm,
+        }, [
+            imgNorm.width,
+            imgNorm.height,
+            1
+        ]);
+
+        device.queue.submit([textureNormLoadEncoder.finish()]);
     }
 
     ////////////////////////////////////////
@@ -149,12 +197,7 @@ export default async function init(canvas, objData, shaders, images, initParams)
 
     const projectionMatrix = mat4.create();
     const viewMatrix = mat4.create();
-    const modelMatrix = mat4.fromValues(
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, 0, 0,
-        0, 0, -30, 1
-    );
+    const modelMatrix = mat4.create();
 
     const viewProjectionMatrix = mat4.create();
     const mvpMatrix = mat4.create();
@@ -210,6 +253,13 @@ export default async function init(canvas, objData, shaders, images, initParams)
                 texture: {
                     sampleType: "float"
                 }
+            },
+            {
+                binding: 4,
+                visibility: GPUShaderStage.FRAGMENT,
+                texture: {
+                    sampleType: "float"
+                }
             }
         ]
     });
@@ -235,7 +285,11 @@ export default async function init(canvas, objData, shaders, images, initParams)
             },
             {
                 binding: 3,
-                resource: texture.createView()
+                resource: textureDiff.createView()
+            },
+            {
+                binding: 4,
+                resource: textureNorm.createView()
             }
 
         ]
