@@ -7,6 +7,7 @@ import {errorFinish, finish} from "./resultModal";
 const program = CubesProgramModel.create();
 const tracker = Tracker.create();
 const TEST_TIME = 60; // 1 min
+const ALTERNATIVE = 'webgl';
 
 const selector = {
     agent: $('#agent'),
@@ -19,7 +20,6 @@ const selector = {
     btnMultipleObjects: $('#btn-multiple-objects'),
     btnLargeObject: $('#btn-large-object'),
     timeLeft: $('#time-left'),
-    modal: $('#send-results-modal'),
 };
 
 let bench;
@@ -66,7 +66,7 @@ function startTest(objName, initParams, name) {
 
     (async () => {
         let initStart = Date.now();
-        tracker.init('webgl', name);
+        tracker.init(ALTERNATIVE, name);
 
         let source = await fetch(`build/resources/obj/${objName}.obj`);
         let obj_data = await source.text();
