@@ -20,6 +20,7 @@ const selector = {
     btnMultipleObjects: $('#btn-multiple-objects'),
     btnLargeObject: $('#btn-large-object'),
     timeLeft: $('#time-left'),
+    loader: $('#loader'),
 };
 
 let bench;
@@ -65,6 +66,11 @@ $(document).ready(() => {
 function startTest(objName, initParams, name) {
 
     (async () => {
+        selector.loader.show();
+        $('#webgl-canvas').hide();
+        selector.btnMultipleObjects.hide();
+        selector.btnLargeObject.hide();
+
         let initStart = Date.now();
         tracker.init(ALTERNATIVE, name);
 
@@ -113,10 +119,16 @@ function startTest(objName, initParams, name) {
             },
         });
 
+        selector.loader.hide();
+        $('#webgl-canvas').show();
+
         start = Date.now();
         tracker.storeInitTime(initStart);
         requestAnimationFrame(loop);
     })().catch(e => {
+        selector.loader.hide();
+        $('#webgl-canvas').show();
+
         errorFinish(e, bench);
         program.finish();
     });

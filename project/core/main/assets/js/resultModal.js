@@ -7,12 +7,12 @@ const selector = {
     modal: $('#send-results-modal'),
     modalClose: $('#send-results-modal .btn-close'),
     modalSend: $('#send-results-modal .btn-send'),
+    btnMultipleObjects: $('#btn-multiple-objects'),
+    btnLargeObject: $('#btn-large-object'),
 };
 
 $(selector.modalClose).on('click', function () {
-    results = null;
-    selector.modal.find('.modal-fill-field').text("");
-    selector.modal.hide();
+    location.reload();
 });
 
 $(selector.modalSend).on('click', function () {
@@ -55,6 +55,9 @@ export function finish(bench) {
 
     results = successResults;
     selector.modal.show();
+
+    selector.btnLargeObject.show();
+    selector.btnMultipleObjects.show();
 }
 
 export function errorFinish(error, bench) {
@@ -71,4 +74,7 @@ export function errorFinish(error, bench) {
 
     results = errorResults;
     selector.modal.show();
+
+    selector.btnLargeObject.show();
+    selector.btnMultipleObjects.show();
 }

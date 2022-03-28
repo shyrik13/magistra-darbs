@@ -32,11 +32,10 @@ let program = {
     fragmentUniformSize: 32,
     triangles: 0,
     vertex: 0,
+    objects: []
 };
 
-let objects = [];
-
-export default async function init(canvas, objData, shaders, images, initParams) {
+export default async function init(canvas, objData, shaders, images, initParams, connectionLostErrorCallback) {
 
     if (!navigator.gpu) {
         document.body.innerHTML = `
@@ -84,6 +83,10 @@ export default async function init(canvas, objData, shaders, images, initParams)
     ////////////////////////////////////
 
     program.device = await adapter.requestDevice();
+
+    program.device.lost.then((m) => {
+        connectionLostErrorCallback(new Error(m.message));
+    });
 
     // canvas.width = window.innerWidth;
     // canvas.height = window.innerHeight;
@@ -270,7 +273,7 @@ export default async function init(canvas, objData, shaders, images, initParams)
     };
     obj.sceneUniformBindGroup = bindGroup(obj.uniformBuffers.vertexUniformBuffer, obj.uniformBuffers.fragmentUniformBuffer);
 
-    objects.push(obj);
+    program.objects.push(obj);
     program.count++;
 
     ///////////////////////////
@@ -350,11 +353,19 @@ export default async function init(canvas, objData, shaders, images, initParams)
             depthLoadValue: 1,
             depthStoreOp: "store",
             stencilLoadValue: 0,
+            stencilLoadOp: "load", // maybe needs to remove
             stencilStoreOp: "store"
         }
     };
 
     program.initParams = initParams;
+}
+
+export function testFinish() {
+    program.objects = [];
+    program.triangles = 0;
+    program.vertex = 0;
+    program.count = 0;
 }
 
 export function getContext() {
@@ -387,8 +398,8 @@ export function draw() {
     renderPass.setVertexBuffer(1, program.buffers.normalBuffer);
     renderPass.setVertexBuffer(2, program.buffers.uvBuffer);
 
-    for (let i = 0; i < objects.length; i++) {
-        const obj = objects[i];
+    for (let i = 0; i < program.objects.length; i++) {
+        const obj = program.objects[i];
         const modelMatrix = mat4.create();
 
         Utils.xformMatrix(
@@ -412,7 +423,7 @@ export function draw() {
         program.device.queue.writeBuffer(obj.uniformBuffers.vertexUniformBuffer, 0, modelMatrix);
     }
 
-    for (let obj of objects) {
+    for (let obj of program.objects) {
         renderPass.setBindGroup(0, obj.sceneUniformBindGroup);
         renderPass.draw(obj.vertexCount, 1, 0, 0);
     }
@@ -434,7 +445,7 @@ export function draw() {
 
         obj.sceneUniformBindGroup = bindGroup(obj.uniformBuffers.vertexUniformBuffer, obj.uniformBuffers.fragmentUniformBuffer);
 
-        objects.push(obj);
+        program.objects.push(obj);
 
         program.triangles += program.dataObj.triangles;
         program.vertex += program.dataObj.vertexCount;
