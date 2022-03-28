@@ -13,13 +13,18 @@
 {% block body %}
     <h1>WebGL</h1>
 
+    <button id="btn-multiple-objects">Multiple Objects Rendering test</button>
+    <button id="btn-large-object">Large Object Rendering test</button>
+
     <div>Agent: <span id="agent"></span></div>
     <div>GPU: <span id="gpu-model"></span></div>
-    <div>GPU: <span id="gpu"></span></div>
     <div>CPU: <span id="cpu"></span></div>
     <div>Used heap memory: <span id="heap-memory">not available</span></div>
     <div>Vertex: <span id="scene-vertex"></span></div>
     <div>Triangles: <span id="scene-triangles"></span></div>
     <div>FPS: <span id="fps"></span></div>
+    <div>Time left: <span id="time-left"></span></div>
     <canvas id="webgl-canvas" width="640" height="480"></canvas>
+
+    {% include "send_results_modal.html.twig" %}
 {% endblock %}

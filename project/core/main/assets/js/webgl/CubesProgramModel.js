@@ -27,7 +27,6 @@ class CubesProgramModel {
 
     gl = undefined;
     programInfo = undefined;
-    buffers = undefined;
 
     /**
      * @private
@@ -110,26 +109,6 @@ class CubesProgramModel {
 
     getContext() {
         return this.gl;
-    }
-
-    getGpuInfo() {
-        var unMaskedInfo = {
-            renderer: '',
-            vendor: ''
-        };
-
-        var dbgRenderInfo = this.gl.getExtension("WEBGL_debug_renderer_info");
-        if (dbgRenderInfo != null) {
-            unMaskedInfo.renderer = this.gl.getParameter(dbgRenderInfo.UNMASKED_RENDERER_WEBGL);
-            unMaskedInfo.vendor = this.gl.getParameter(dbgRenderInfo.UNMASKED_VENDOR_WEBGL);
-        }
-
-        return {
-            renderer: this.gl.getParameter(this.gl.RENDERER),
-            vendor: this.gl.getParameter(this.gl.VENDOR),
-            rendererInfo: unMaskedInfo.renderer,
-            vendorInfo: unMaskedInfo.vendor,
-        };
     }
 
     draw(time) {
@@ -321,6 +300,17 @@ class CubesProgramModel {
         }
 
         return shader;
+    }
+
+    finish() {
+        this.cubes = [];
+        this.triangles = 0;
+        this.vertex = 0;
+
+        this.objVertex = 0;
+        this.objTriangles = 0;
+        this.cubeObj = {};
+        this.textures = [];
     }
 }
 

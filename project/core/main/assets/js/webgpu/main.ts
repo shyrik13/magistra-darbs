@@ -263,7 +263,7 @@ export default async function init(canvas, objData, shaders, images, initParams)
     program.vertex += program.dataObj.vertexCount;
 
     let obj = {
-        pos: { x: -20, y: 18, z: -50 },
+        pos: initParams.init_pos,
         vertexCount: program.dataObj.vertexCount,
         uniformBuffers: bindUniformBuffers(),
         sceneUniformBindGroup: null

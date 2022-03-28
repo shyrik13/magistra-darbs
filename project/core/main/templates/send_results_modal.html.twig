@@ -1,0 +1,59 @@
+<div id="send-results-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Results</h5>
+                <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div><b>Test:</b> <span id="modal-test" class="modal-fill-field"></span></div>
+                <div><b>Agent:</b> <span id="modal-agent" class="modal-fill-field"></span></div>
+                <div><b>GPU Model:</b> <span id="modal-gpu-model" class="modal-fill-field"></span></div>
+
+                <div id="modal-body-success" style="display: none">
+                    <div><b>Total Vertex:</b> <span id="modal-total-vertex" class="modal-fill-field"></span></div>
+                    <div><b>Total Triangles:</b> <span id="modal-total-triangles" class="modal-fill-field"></span></div>
+                    <div><b>Init Time:</b> <span id="modal-init-time" class="modal-fill-field"></span></div>
+                    <br/>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th scope="col">CPU (accumulations)</th>
+                                <th scope="col">Heap Memory (MB)</th>
+                                <th scope="col">FPS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">Max</td>
+                                <td id="modal-max-cpu" class="modal-fill-field">&nbsp;</td>
+                                <td id="modal-max-heap" class="modal-fill-field">&nbsp;</td>
+                                <td id="modal-max-fps" class="modal-fill-field">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">Min</td>
+                                <td id="modal-min-cpu" class="modal-fill-field">&nbsp;</td>
+                                <td id="modal-min-heap" class="modal-fill-field">&nbsp;</td>
+                                <td id="modal-min-fps" class="modal-fill-field">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td scope="row">Avg</td>
+                                <td id="modal-avg-cpu" class="modal-fill-field">&nbsp;</td>
+                                <td id="modal-avg-heap" class="modal-fill-field">&nbsp;</td>
+                                <td id="modal-avg-fps" class="modal-fill-field">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="modal-body-error" style="display: none">
+                    <div class="alert-danger"><b>Error:</b> <span id="modal-error" class="modal-fill-field"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-send btn-primary" data-link="{{ path('api_store_results') }}">Send results</button>
+            </div>
+        </div>
+    </div>
+</div>

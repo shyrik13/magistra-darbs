@@ -12,7 +12,6 @@ $(document).ready(() => {
         fps: $('#fps'),
         gpuModel: $('#gpu-model'),
         heap: $('#heap-memory'),
-        gpu: $('#gpu'),
         cpu: $('#cpu'),
         sceneVertex: $('#scene-vertex'),
         sceneTriangles: $('#scene-triangles'),
@@ -63,7 +62,6 @@ $(document).ready(() => {
             // chartLen: 5,
             paramLogger: (i, cpu, gpu, mem, fps, totalTime, frameId, sceneInfo) => {
                 selector.cpu.text(`${cpu.toFixed(2)} %`);
-                selector.gpu.text(`${gpu.toFixed(2)} %`);
                 selector.fps.text(fps.toFixed(1));
                 selector.heap.text(`${mem.toFixed(8)} MB`);
                 selector.sceneVertex.text(sceneInfo.vertex);

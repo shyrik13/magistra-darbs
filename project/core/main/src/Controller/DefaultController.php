@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\Document\Test;
+use App\Manager\TestManager;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,18 +14,25 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends AbstractController
 {
 
+    /**
+     * @var TestManager
+     */
+    private $testManager;
+
+    public function __construct (
+        TestManager $testManager
+    ) {
+        $this->testManager = $testManager;
+    }
+
     public function indexAction(Request $request)
     {
         return $this->render($request->attributes->get('_template'));
     }
 
-    public function testMongoCreateAction(DocumentManager $documentManager)
+    public function storeResultsAction(Request $request)
     {
-        $test = new Test();
-        $test->setName("aaa");
-
-        $documentManager->persist($test);
-        $documentManager->flush();
+        $this->testManager->storeTest($request->getContent());
 
         return new JsonResponse("ok");
     }

@@ -9,7 +9,6 @@ $(document).ready(() => {
         fps: $('#fps'),
         gpuModel: $('#gpu-model'),
         heap: $('#heap-memory'),
-        gpu: $('#gpu'),
         cpu: $('#cpu'),
         sceneVertex: $('#scene-vertex'),
         sceneTriangles: $('#scene-triangles'),
@@ -22,7 +21,7 @@ $(document).ready(() => {
         selector.gpuModel.text(gpuTier.gpu);
         selector.agent.text(getAgent());
 
-        let source = await fetch('build/resources/obj/cube.obj');
+        let source = await fetch('build/resources/obj/skull.obj');
         let obj_data = await source.text();
 
         let vsSource = await fetch('build/resources/shader/obj.vert.wgsl');
@@ -37,16 +36,16 @@ $(document).ready(() => {
         };
 
         const images = {
-            diffuse_url: 'build/resources/images/cube-diffuse.png',
-            normal_url: 'build/resources/images/cube-normal.png',
+            diffuse_url: 'build/resources/images/skull-diffuse.png',
+            normal_url: 'build/resources/images/skull-normal.png',
         };
 
         const initParams = {
-            init_pos: {x: -20.0, y: 20.0, z: -50.0},
+            init_pos: {x: 0.0, y: 0.0, z: -50.0},
             min_max_x: {min: -20.0, max: 20.0},
             min_max_y: {min: -18.0, max: 18.0},
             min_max_z: {min: -80.0, max: -50.0},
-            multiple: true
+            multiple: false
         };
 
         const canvas = document.querySelector('#webgpu-canvas');
@@ -59,7 +58,6 @@ $(document).ready(() => {
             // chartLen: 5,
             paramLogger: (i, cpu, gpu, mem, fps, totalTime, frameId, sceneInfo) => {
                 selector.cpu.text(`${cpu.toFixed(2)} %`);
-                selector.gpu.text(`${gpu.toFixed(2)} %`);
                 selector.fps.text(fps.toFixed(1));
                 selector.heap.text(`${mem.toFixed(8)} MB`);
                 selector.sceneVertex.text(sceneInfo.vertex);

@@ -22,10 +22,6 @@ page_webgpu:
     defaults:
         _template: "page_webgpu.html.twig"
 
-mongo_test_create:
-    path: /mongo-test-create
-    controller: App\Controller\DefaultController::testMongoCreateAction
-
-mongo_test_find:
-    path: /mongo-test-find
-    controller: App\Controller\DefaultController::testMongoFindAction
+api_store_results:
+    path: /store-results
+    controller: App\Controller\DefaultController::storeResultsAction
