@@ -68,8 +68,6 @@ function startTest(objName, initParams, name) {
         let initStart = Date.now();
         tracker.init('webgl', name);
 
-        throw new Error("Test error");
-
         let source = await fetch(`build/resources/obj/${objName}.obj`);
         let obj_data = await source.text();
 
