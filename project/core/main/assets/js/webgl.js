@@ -6,7 +6,7 @@ import {errorFinish, finish} from "./resultModal";
 
 const program = CubesProgramModel.create();
 const tracker = Tracker.create();
-const TEST_TIME = 5; // 1 min
+const TEST_TIME = 60; // 1 min
 
 const selector = {
     agent: $('#agent'),
