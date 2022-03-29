@@ -32,6 +32,12 @@ class Test
      * @var string
      * @MongoDB\Field(type="string")
      */
+    private $deviceType;
+
+    /**
+     * @var string
+     * @MongoDB\Field(type="string")
+     */
     private $gpuModel;
 
     /**
@@ -119,6 +125,17 @@ class Test
     private $trianglesTotal;
 
     /**
+     * @var \DateTime|null
+     * @MongoDB\Field(type="date")
+     */
+    private $createdAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
      * @return string
      */
     public function getId(): string
@@ -164,6 +181,22 @@ class Test
     public function setAgent(string $agent): void
     {
         $this->agent = $agent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceType(): string
+    {
+        return $this->deviceType;
+    }
+
+    /**
+     * @param string $deviceType
+     */
+    public function setDeviceType(string $deviceType): void
+    {
+        $this->deviceType = $deviceType;
     }
 
     /**
@@ -404,6 +437,22 @@ class Test
     public function setTrianglesTotal(?int $trianglesTotal): void
     {
         $this->trianglesTotal = $trianglesTotal;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime|null $createdAt
+     */
+    public function setCreatedAt(?\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 
 }

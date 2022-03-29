@@ -19,6 +19,7 @@ const selector = {
     btnLargeObject: $('#btn-large-object'),
     timeLeft: $('#time-left'),
     loader: $('#loader'),
+    deviceType: $('#device-type'),
 };
 
 let bench;
@@ -59,6 +60,7 @@ $(document).ready(() => {
         const gpuTier = await tracker.getGpuTier();
         selector.gpuModel.text(gpuTier.gpu);
         selector.agent.text(tracker.getAgent());
+        selector.deviceType.text(tracker.getDeviceType());
     })();
 });
 

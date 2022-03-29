@@ -15,6 +15,7 @@ class Tracker {
     initTime;
     alternative;
     name;
+    deviceType;
 
     /**
      * @private
@@ -53,6 +54,25 @@ class Tracker {
         return this.agent;
     }
 
+    getDeviceType() {
+        if (!this.deviceType) {
+            const ua = navigator.userAgent;
+            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+                this.deviceType = "tablet";
+            }
+            if (
+                /Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+                    ua
+                )
+            ) {
+                this.deviceType = "mobile";
+            }
+            this.deviceType = "desktop";
+        }
+
+        return this.deviceType;
+    }
+
     async getGpuTier() {
         if (!this.gpuTier) {
             this.gpuTier = await getGPUTier();
@@ -81,6 +101,7 @@ class Tracker {
             gpuModel: this.gpuTier.gpu,
             alternative: this.alternative,
             name: this.name,
+            deviceType: this.deviceType,
             initTime: +this.initTime.toFixed(0),
             cpuHistory: this.cpuHistory,
             fpsHistory: this.fpsHistory,
@@ -114,6 +135,7 @@ class Tracker {
             gpuModel: this.gpuTier.gpu,
             alternative: this.alternative,
             name: this.name,
+            deviceType: this.deviceType,
             error: error.message
         }
     }

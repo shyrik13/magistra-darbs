@@ -42,6 +42,7 @@ export function finish(bench) {
 
     selector.modal.find('#modal-test').text(successResults.name);
     selector.modal.find('#modal-agent').text(successResults.agent);
+    selector.modal.find('#modal-device-type').text(successResults.deviceType);
     selector.modal.find('#modal-gpu-model').text(successResults.gpuModel);
     selector.modal.find('#modal-total-vertex').text(successResults.vertexTotal);
     selector.modal.find('#modal-total-triangles').text(successResults.trianglesTotal);
@@ -69,6 +70,7 @@ export function errorFinish(error, bench) {
 
     selector.modal.find('#modal-test').text(errorResults.name);
     selector.modal.find('#modal-agent').text(errorResults.agent);
+    selector.modal.find('#modal-device-type').text(errorResults.deviceType);
     selector.modal.find('#modal-gpu-model').text(errorResults.gpuModel);
     selector.modal.find('#modal-error').text(errorResults.error);
 
