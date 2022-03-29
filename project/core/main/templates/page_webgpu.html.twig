@@ -18,6 +18,23 @@
 {% block body %}
     <div>
         <h1>WebGPU</h1>
+
+        <div class="alert-warning">
+            <div>
+                WebGPU is currently supported in <b>Chrome Canary</b>, <b>Edge Canary</b>
+                with the flag "enable-unsafe-webgpu" enabled </br>
+                in <b>Firefox Nightly</b> with the “dom.webgpu.enabled = true” preference set </br>
+                and in <b>Safari</b> with Preferences → Advanced → Show Develop menu in menu bar, then, in the Develop menu, make sure Experimental Features → WebGPU is checked.
+                </br>
+                <b>After WebGPU flag setup refresh browser!</b>
+            </div>
+            <div>
+                </br>
+                See the <a href="https://github.com/gpuweb/gpuweb/wiki/Implementation-Status">Implementation Status</a> page for more details.
+            </div>
+        </div>
+        </br>
+
         {% include "page_block.html.twig" %}
         <canvas id="webgpu-canvas" width="640" height="480"></canvas>
         {% include "send_results_modal.html.twig" %}

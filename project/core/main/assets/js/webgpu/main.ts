@@ -38,20 +38,6 @@ let program = {
 export default async function init(canvas, objData, shaders, images, initParams, connectionLostErrorCallback) {
 
     if (!navigator.gpu) {
-        document.body.innerHTML = `
-            <h1>WebGPU not supported!</h1>
-            <div>
-                WebGPU is currently only supported in Chrome Canary, Edge Canary
-                with the flag "enable-unsafe-webgpu" enabled.
-                
-                WebGPU is currently only supported in Firefox Nightly
-                with the “dom.webgpu.enabled = true” preference set.
-            </div>
-            <div>
-                See the <a href="https://github.com/gpuweb/gpuweb/wiki/Implementation-Status">Implementation Status</a> page for more details.
-            </div>
-        `;
-
         throw new Error("WebGPU not supported");
     }
 
