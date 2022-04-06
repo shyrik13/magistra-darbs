@@ -132,6 +132,8 @@ function startTest(objName, initParams, name, testTime) {
         selector.loader.hide();
         $('#webgl-canvas').show();
 
+        console.log(e);
+
         errorFinish(e, bench);
         program.finish();
     });
