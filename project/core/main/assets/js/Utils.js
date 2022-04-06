@@ -65,11 +65,7 @@ class Utils {
                         let vp = vArr[parseInt(n_split[0])];
                         let uvp = uvArr[parseInt(n_split[1])];
 
-                        if (!vp) {
-                            console.log(vArr);
-                            console.log(parseInt(n_split[0]));
-                        }
-
+                        console.log(vp);
                         obj.positions.push(...vp);
                         obj.uvs.push(...uvp);
                         obj.normals.push(...vnArr[parseInt(n_split[2])]);
