@@ -86,6 +86,8 @@ class Tracker {
 
         if (heapMemory) {
             this.heapMemoryHistory.push(heapMemory);
+        } else {
+            this.heapMemoryHistory.push(0);
         }
 
         this.vertexHistory.push(vertex);
