@@ -65,6 +65,12 @@ class Utils {
                         let vp = vArr[parseInt(n_split[0])];
                         let uvp = uvArr[parseInt(n_split[1])];
 
+                        if (!vp) {
+                            console.log(triangles);
+                            console.log(vArr);
+                            console.log(parseInt(n_split[0]));
+                        }
+
                         console.log(vp);
                         obj.positions.push(...vp);
                         obj.uvs.push(...uvp);
