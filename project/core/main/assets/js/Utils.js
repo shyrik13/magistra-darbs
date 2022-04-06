@@ -39,7 +39,7 @@ class Utils {
 
                 let vPoints = [];
                 for (let j = 1; j < split.length; j++) {
-                    if (split[j] === '\r') {
+                    if (split[j] === '\r' || split[j] === '' || split[j] === '\n') {
                         continue;
                     }
 
@@ -48,7 +48,7 @@ class Utils {
 
                 let index = 0;
                 let triangles = [];
-                console.log(vPoints);
+
                 // quads logic ABCD => (ABC, ACD)
                 while (index + 2 !== vPoints.length) {
                     triangles.push([vPoints[0], vPoints[index+1], vPoints[index+2]]);
@@ -72,7 +72,6 @@ class Utils {
                             console.log(parseInt(n_split[0]));
                         }
 
-                        console.log(vp);
                         obj.positions.push(...vp);
                         obj.uvs.push(...uvp);
                         obj.normals.push(...vnArr[parseInt(n_split[2])]);
