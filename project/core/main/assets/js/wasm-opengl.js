@@ -133,6 +133,8 @@ function startTest(objName, initParams, name, testTime) {
         selector.loader.hide();
         $('#rust-gl').show();
 
+        console.error(e);
+
         errorFinish(e, bench);
     });
 

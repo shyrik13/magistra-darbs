@@ -135,6 +135,8 @@ function startTest(objName, initParams, name, testTime) {
         selector.loader.hide();
         $('#webgpu-canvas').show();
 
+        console.error(e);
+
         errorFinish(e, bench);
         testFinish();
     });
