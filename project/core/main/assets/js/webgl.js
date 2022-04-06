@@ -50,7 +50,7 @@ $(selector.btnLargeObject).on('click', () => {
         multiple: false
     };
 
-    startTest('skull', initParams, 'Large Object Rendering', TEST_TIME_20);
+    startTest('skull2', initParams, 'Large Object Rendering', TEST_TIME_20);
 });
 
 // no needs to track CPU on web because of security reasons
