@@ -2,20 +2,20 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Results</h5>
+                <h5 class="modal-title">Testa rezultāti</h5>
                 <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
-                <div><b>Test:</b> <span id="modal-test" class="modal-fill-field"></span></div>
-                <div><b>Agent:</b> <span id="modal-agent" class="modal-fill-field"></span></div>
-                <div><b>Device Type:</b> <span id="modal-device-type" class="modal-fill-field"></span></div>
-                <div><b>GPU Model:</b> <span id="modal-gpu-model" class="modal-fill-field"></span></div>
+                <div><b>Tests:</b> <span id="modal-test" class="modal-fill-field"></span></div>
+                <div><b>Pārlūkprogrammas Aģents:</b> <span id="modal-agent" class="modal-fill-field"></span></div>
+                <div><b>Ierīces tips:</b> <span id="modal-device-type" class="modal-fill-field"></span></div>
+                <div><b>GPU:</b> <span id="modal-gpu-model" class="modal-fill-field"></span></div>
 
                 <div id="modal-body-success" style="display: none">
-                    <div><b>Total Vertex:</b> <span id="modal-total-vertex" class="modal-fill-field"></span></div>
-                    <div><b>Total Triangles:</b> <span id="modal-total-triangles" class="modal-fill-field"></span></div>
-                    <div><b>Init Time:</b> <span id="modal-init-time" class="modal-fill-field"></span></div>
+                    <div><b>Virsotnes:</b> <span id="modal-total-vertex" class="modal-fill-field"></span></div>
+                    <div><b>Trīsstūras:</b> <span id="modal-total-triangles" class="modal-fill-field"></span></div>
+                    <div><b>Iniciālizācijas laiks:</b> <span id="modal-init-time" class="modal-fill-field"></span></div>
                     <br/>
                     <table class="table">
                         <thead>
@@ -49,11 +49,11 @@
                     </table>
                 </div>
                 <div id="modal-body-error" style="display: none">
-                    <div class="alert-danger"><b>Error:</b> <span id="modal-error" class="modal-fill-field"></span></div>
+                    <div class="alert-danger"><b>Kļūda:</b> <span id="modal-error" class="modal-fill-field"></span></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-send btn-primary" data-link="{{ path('api_store_results') }}">Send results</button>
+                <button type="button" class="btn btn-send btn-primary" data-link="{{ path('api_store_results') }}">Nosūtīt rezultātus</button>
             </div>
         </div>
     </div>

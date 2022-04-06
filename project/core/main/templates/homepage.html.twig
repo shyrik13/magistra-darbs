@@ -3,5 +3,53 @@
 {% block title %}Home Page!{% endblock %}
 
 {% block body %}
-    <h1>Homepage</h1>
+    <h1>"Mūsdienu WebGL alternatīvas" <br/> maģistra darba praktiskās daļas pētījums.</h1>
+    <p>Autors: Aleksandrs Koroļko</p>
+    <hr>
+    <h3>Instrukcija lietotājiem</h3>
+    <p>Darbā ietvaros ir nepieciešams aplūkot trīs tīmekļa vides datorgrafikas lietojumprogrammas saskarnēs, kurus iespējams redzēt izvelnē āugšup.</p>
+    <p>Lai to realizēt ir svarīgi saņemt testēšanas datus no vairāku ierīču kopas (datori, planšetdatori, veidtālruni utt.), ar ko Jūs varat man palīdzēt.</p>
+    <h4>Nepieciešamās darbībās:</h4>
+    <ul>
+        <li>Katrā alternatīvas lapā būs redzamas divas testēšanas pogas. <img style="max-width: 280px" src="{{ asset('build/resources/images/home_buttons.png') }}"/></li>
+        <li>Katra poga ieslēdz testu un fiksē datus testa laikā periodā (negārāk nekā 1 minutē). <div class="alert-warning" style="width: fit-content"><p>Vienā testēšanas posmā varētu būt ieslēgts tikai viens tests!</p></div></li>
+        <li>Pēc testa <b>pabeigšanās</b> vai <b>kļūdas gadījumā</b> būtu iespējams nosūtīt datus, kuras palīdzēs mana maģistra darba pētījumā.</li>
+    </ul>
+    <h4>Papildinformācija:</h4>
+    <div class="alert-warning" style="width: fit-content">
+        <p>WebGPU alternatīva, maģistra darba pētījuma laikā, bija testēšanas posmā, tāpēc to ir iespējāms notestēt sekojošās tīmekļa pārlūkprogrammās ar nodefinēto opciju ieslēgšanu, kas ir parādīts tabulā zemāk.</p>
+
+        WebGPU is currently supported in <b></b>, <b>Edge Canary</b>
+        with the flag "enable-unsafe-webgpu" enabled </br>
+        in <b>Firefox Nightly</b> with the “dom.webgpu.enabled = true” preference set </br>
+        and in <b>Safari</b> with Preferences → Advanced → Show Develop menu in menu bar, then, in the Develop menu, make sure Experimental Features → WebGPU is checked.
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tīmekļa pārlūkprogramma</th>
+                    <th>Opcijas ieslēgšana</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chrome Canary</td>
+                    <td>Ieslēgt "enable-unsafe-webgpu" opciju about://flags pārlūkprogrammas konfigurācijas lapā</td>
+                </tr>
+                <tr>
+                    <td>Edge Canary</td>
+                    <td>Ieslēgt "enable-unsafe-webgpu" opciju about://flags pārlūkprogrammas konfigurācijas lapā</td>
+                </tr>
+                <tr>
+                    <td>Firefox Nightly</td>
+                    <td>Uzlikt “dom.webgpu.enabled = true” opciju about:config pārlūkprogrammas konfigurācijas lapā</td>
+                </tr>
+                <tr>
+                    <td>Safari</td>
+                    <td>Preferences → Advanced → Show Develop menu, pārliecināties, ka Experimental Features → WebGPU ir ieslēgts</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 {% endblock %}

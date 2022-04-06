@@ -6,7 +6,8 @@ import {errorFinish, finish} from "./resultModal";
 
 const program = CubesProgramModel.create();
 const tracker = Tracker.create();
-const TEST_TIME = 60; // 1 min
+const TEST_TIME_60 = 60; // 1 min
+const TEST_TIME_20 = 20; // 20 sec
 const ALTERNATIVE = 'webgl';
 
 const selector = {
@@ -37,7 +38,7 @@ $(selector.btnMultipleObjects).on('click', () => {
         multiple: true
     };
 
-    startTest('cube', initParams, 'Multiple Objects Rendering');
+    startTest('cube', initParams, 'Multiple Objects Rendering', TEST_TIME_60);
 });
 
 $(selector.btnLargeObject).on('click', () => {
@@ -49,7 +50,7 @@ $(selector.btnLargeObject).on('click', () => {
         multiple: false
     };
 
-    startTest('skull', initParams, 'Large Object Rendering');
+    startTest('skull', initParams, 'Large Object Rendering', TEST_TIME_20);
 });
 
 // no needs to track CPU on web because of security reasons
@@ -65,7 +66,7 @@ $(document).ready(() => {
     })();
 });
 
-function startTest(objName, initParams, name) {
+function startTest(objName, initParams, name, testTime) {
 
     (async () => {
         selector.loader.show();
@@ -114,7 +115,7 @@ function startTest(objName, initParams, name) {
                 selector.heap.text(`${mem} MB`);
                 selector.sceneVertex.text(sceneInfo.vertex);
                 selector.sceneTriangles.text(sceneInfo.triangles);
-                selector.timeLeft.text(`${(TEST_TIME - sceneInfo.diff).toFixed(0)} sec`);
+                selector.timeLeft.text(`${(testTime - sceneInfo.diff).toFixed(0)} sec`);
             },
             chartLogger: (i, chart, circularId) => {
                 // console.log('chart circular buffer=', chart)
@@ -147,7 +148,7 @@ function startTest(objName, initParams, name) {
 
         bench.nextFrame(now, info);
 
-        if (diff <= TEST_TIME) {
+        if (diff <= testTime) {
             requestAnimationFrame(loop);
         }
         else {
