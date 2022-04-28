@@ -1,0 +1,180 @@
+_id,status,deviceType,gpuModel,alternative,name,error,initTime,cpu.max,cpu.min,cpu.avg,fps.max,fps.min,fps.avg,heap.max,heap.min,heap.avg,vertexTotal,trianglesTotal
+624d803701d1d6264d1db312,success,desktop,nvidia geforce gtx 1050 ti opengl engine,wasm-opengl,Multiple Objects Rendering,null,751,22,1,17,60,45,56,35.84208488,11.3080616,21.83944822,118764,39588
+624d808201d1d6264d1db313,success,desktop,nvidia geforce gtx 1050 ti opengl engine,wasm-opengl,Large Object Rendering,null,3008,0,0,0,60,60,60,67.15084362,66.43642616,66.79265454,240048,80016
+624d80c8c46c67540b56e042,success,desktop,nvidia geforce gtx 1050 ti opengl engine,webgl,Multiple Objects Rendering,null,196,25,3,20,60,42,53,44.20606518,11.15430164,27.53768173,113292,37764
+624d8b4901d1d6264d1db314,success,desktop,"nvidia corporation, nvidia geforce gtx 1050 ti/pcie/sse2, opengl 4.5.0 nvidia 470.103.01) (ANGLE (NVIDIA Corporation, NVIDIA GeForce GTX 1050 Ti/PCIe/SSE2, OpenGL 4.5.0 NVIDIA 470.103.01))",webgl,Large Object Rendering,null,2417,1,0,0,60,53,57,116.13826752,48.94678974,101.39627868,240048,80016
+624d8b6fc46c67540b56e043,error,desktop,nvidia geforce gtx 1050 ti opengl engine,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+624d8b76c46c67540b56e044,error,desktop,nvidia geforce gtx 1050 ti opengl engine,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+624d8f29c46c67540b56e045,success,desktop,nvidia geforce rtx 2070 super,webgpu,Multiple Objects Rendering,null,816,24,4,22,234,35,72,26.16255569,6.18630791,15.83364073,154692,51564
+624d909301d1d6264d1db315,success,desktop,nvidia geforce rtx 2070 super,webgpu,Large Object Rendering,null,2172,1,0,1,240,1,226,100.08342648,88.94541073,95.48554893,240048,80016
+624d90e301d1d6264d1db316,success,desktop,nvidia geforce rtx 2070 super,webgl,Multiple Objects Rendering,null,395,25,6,24,240,35,68,26.83116055,5.878829,15.45917957,145476,48492
+624d921901d1d6264d1db317,success,desktop,nvidia geforce rtx 2070 super,webgl,Large Object Rendering,null,2011,1,0,1,240,239,240,94.29512119,90.00301361,92.33646262,240048,80016
+624d9268c46c67540b56e046,success,desktop,nvidia geforce rtx 2070 super,wasm-opengl,Multiple Objects Rendering,null,197,26,4,23,240,48,90,24.33755302,7.54852867,15.40361162,192204,64068
+624d929ac46c67540b56e047,success,desktop,nvidia geforce rtx 2070 super,wasm-opengl,Large Object Rendering,null,746,1,0,1,240,234,240,82.06996155,56.49574184,71.13894237,240048,80016
+624d949bc46c67540b56e048,success,desktop,adreno 630,wasm-opengl,Multiple Objects Rendering,null,813,26,4,22,60,24,44,9.53674316,9.53674316,9.53674316,94752,31584
+624d94c401d1d6264d1db318,success,desktop,adreno 630,wasm-opengl,Large Object Rendering,null,5300,1,1,1,60,46,56,9.53674316,9.53674316,9.53674316,240048,80016
+624d9514c46c67540b56e049,success,desktop,adreno 630,webgl,Multiple Objects Rendering,null,123,26,6,23,60,15,30,9.53674316,9.53674316,9.53674316,64116,21372
+624d953901d1d6264d1db319,success,desktop,adreno 630,webgl,Large Object Rendering,null,2194,1,1,1,60,48,55,9.53674316,9.53674316,9.53674316,240048,80016
+624d954f01d1d6264d1db31a,error,desktop,adreno 630,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+624d955201d1d6264d1db31b,error,desktop,adreno 630,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+624da0fdc46c67540b56e04a,error,desktop,apple gpu (Apple GPU),webgpu,Multiple Objects Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+624da374c46c67540b56e04b,success,desktop,apple gpu (Apple GPU),wasm-opengl,Large Object Rendering,null,11147,1,0,0,60,60,60,0,0,0,240048,80016
+624da3b8c46c67540b56e04c,success,desktop,apple gpu (Apple GPU),wasm-opengl,Multiple Objects Rendering,null,669,17,1,12,60,36,54,0,0,0,114948,38316
+624da3c201d1d6264d1db31c,error,desktop,apple gpu (Apple GPU),webgpu,Large Object Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+624da3c501d1d6264d1db31d,error,desktop,apple gpu (Apple GPU),webgpu,Multiple Objects Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+624da407c46c67540b56e04d,success,desktop,apple gpu (Apple GPU),webgl,Multiple Objects Rendering,null,303,18,1,14,60,29,49,0,0,0,105228,35076
+624da42ac46c67540b56e04e,success,desktop,apple gpu (Apple GPU),webgl,Large Object Rendering,null,4105,0,0,0,61,60,60,0,0,0,240048,80016
+625297a401d1d6264d1db31e,success,desktop,intel uhd graphics 620,wasm-opengl,Multiple Objects Rendering,null,591,26,0,16,60,1,49,28.51011181,14.97342491,19.21152739,85176,28392
+625297cd01d1d6264d1db31f,success,desktop,intel uhd graphics 620,wasm-opengl,Large Object Rendering,null,3963,0,0,0,60,0,56,69.42704773,64.43551826,68.85686992,240048,80016
+62529816c46c67540b56e04f,success,desktop,intel uhd graphics 620,webgpu,Multiple Objects Rendering,null,2591,22,3,17,60,29,46,43.62982082,14.82378483,27.85131593,98748,32916
+62529834c46c67540b56e050,success,desktop,intel uhd graphics 620,webgpu,Large Object Rendering,null,2540,1,0,1,60,0,57,116.40015411,112.57654762,115.03979901,240048,80016
+6252987801d1d6264d1db320,success,desktop,intel uhd graphics 620,webgl,Multiple Objects Rendering,null,62,27,3,23,60,22,38,42.31981277,13.16697216,25.6684951,80856,26952
+6252989d01d1d6264d1db321,success,desktop,intel uhd graphics 620,webgl,Large Object Rendering,null,2232,1,0,0,60,60,60,115.31352806,113.69920063,114.49446235,240048,80016
+62529cd3c46c67540b56e051,success,desktop,intel uhd,wasm-opengl,Large Object Rendering,null,725,1,0,1,240,87,226,65.30038929,63.17481232,64.35228667,240048,80016
+62529d13c46c67540b56e052,success,desktop,intel uhd,wasm-opengl,Multiple Objects Rendering,null,69,26,3,20,240,32,71,39.93889618,11.41114426,24.7269005,151488,50496
+62529d5501d1d6264d1db322,success,desktop,intel uhd,webgpu,Multiple Objects Rendering,null,125,14,4,12,210,21,50,44.23260403,13.77725887,25.58732153,106092,35364
+62529d6e01d1d6264d1db323,success,desktop,intel uhd,webgpu,Large Object Rendering,null,1273,2,0,1,240,1,224,118.49085712,107.78734303,113.53595538,240048,80016
+62529daf01d1d6264d1db324,success,desktop,intel uhd,webgl,Multiple Objects Rendering,null,33,26,8,24,238,25,57,46.69318199,13.67472649,28.85821507,122724,40908
+62529dc701d1d6264d1db325,success,desktop,intel uhd,webgl,Large Object Rendering,null,1010,1,0,1,240,185,237,102.41150093,98.06377888,100.48971663,240048,80016
+6253e25ec46c67540b56e053,success,desktop,nvidia geforce rtx 2080,wasm-opengl,Multiple Objects Rendering,null,476,25,1,19,144,3,106,24.97222996,7.96003342,13.53969785,170532,56844
+6253e27ac46c67540b56e054,success,desktop,nvidia geforce rtx 2080,wasm-opengl,Large Object Rendering,null,1325,1,0,0,144,34,137,60.0975399,56.95571709,58.57325292,240048,80016
+6253e28601d1d6264d1db326,error,desktop,nvidia geforce rtx 2080,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6253e28801d1d6264d1db327,error,desktop,nvidia geforce rtx 2080,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6253e2c801d1d6264d1db328,success,desktop,nvidia geforce rtx 2080,webgl,Multiple Objects Rendering,null,24,25,1,22,144,7,77,26.24703407,5.87436485,15.47051364,146628,48876
+6253e2e1c46c67540b56e055,success,desktop,nvidia geforce rtx 2080,webgl,Large Object Rendering,null,895,0,0,0,144,142,144,71.2954092,68.35338688,69.9586153,240048,80016
+6253ec9201d1d6264d1db329,error,desktop,nvidia evga geforce gt 730,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6253ec9801d1d6264d1db32a,error,desktop,nvidia evga geforce gt 730,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6253ecebc46c67540b56e056,success,desktop,nvidia evga geforce gt 730,wasm-opengl,Multiple Objects Rendering,null,233,27,1,15,60,33,47,22.97490692,15.71717358,19.52167263,100044,33348
+6253ed09c46c67540b56e057,success,desktop,nvidia evga geforce gt 730,wasm-opengl,Large Object Rendering,null,833,0,0,0,60,53,58,68.14527512,67.31560421,67.72578606,240048,80016
+6253ed5801d1d6264d1db32b,success,desktop,nvidia evga geforce gt 730,webgl,Multiple Objects Rendering,null,93,25,1,18,60,22,44,24.67608547,12.84250641,18.5487912,95328,31776
+6253ed7101d1d6264d1db32c,success,desktop,nvidia evga geforce gt 730,webgl,Large Object Rendering,null,1069,0,0,0,60,55,58,67.87002182,66.25261211,67.07352844,240048,80016
+6253facd01d1d6264d1db32d,success,desktop,intel mesa dri intel hd graphics 620,wasm-opengl,Multiple Objects Rendering,null,1343,26,0,13,60,1,51,21.88661766,9.13686848,12.71102717,71964,23988
+6253fc16c46c67540b56e058,success,desktop,intel mesa dri intel hd graphics 620,wasm-opengl,Large Object Rendering,null,3078,1,0,1,60,60,60,61.40773869,60.68124008,61.04320195,240048,80016
+6253fcbbc46c67540b56e059,success,desktop,intel mesa dri intel hd graphics 620,webgl,Multiple Objects Rendering,null,141,25,0,19,60,0,48,25.14474487,6.48147869,14.56344327,61956,20652
+6253fcd6c46c67540b56e05a,success,desktop,intel mesa dri intel hd graphics 620,webgl,Large Object Rendering,null,1351,1,0,1,60,24,58,111.19014454,109.66532516,110.4271177,240048,80016
+6253fd3101d1d6264d1db32e,error,desktop,intel mesa dri intel hd graphics 620,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6253fd3301d1d6264d1db32f,error,desktop,intel mesa dri intel hd graphics 620,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62545898c46c67540b56e05b,success,desktop,intel mesa dri intel hd graphics 620,wasm-opengl,Multiple Objects Rendering,null,251,25,6,15,51,21,31,19.81592178,7.31201839,12.07314314,65952,21984
+625458b5c46c67540b56e05c,success,desktop,intel mesa dri intel hd graphics 620,wasm-opengl,Large Object Rendering,null,3851,3,2,2,58,55,57,59.7457552,59.05018997,59.39663164,240048,80016
+625458f201d1d6264d1db330,error,desktop,intel mesa dri intel hd graphics 620,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625458f501d1d6264d1db331,error,desktop,intel mesa dri intel hd graphics 620,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6254594901d1d6264d1db332,success,desktop,intel mesa dri intel hd graphics 620,webgl,Multiple Objects Rendering,null,352,27,12,24,54,16,27,22.60981655,4.0706234,12.09715823,58284,19428
+6254596b01d1d6264d1db333,success,desktop,qualcomm adreno 650,wasm-opengl,Multiple Objects Rendering,null,459,26,5,25,119,26,49,10.10894775,10.10894775,10.10894775,104580,34860
+6254598801d1d6264d1db334,success,desktop,qualcomm adreno 650,wasm-opengl,Large Object Rendering,null,4646,1,1,1,119,117,119,10.10894775,10.10894775,10.10894775,240048,80016
+6254599601d1d6264d1db335,error,desktop,qualcomm adreno 650,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6254599901d1d6264d1db336,error,desktop,qualcomm adreno 650,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625459a701d1d6264d1db337,success,desktop,intel mesa dri intel hd graphics 620,webgl,Large Object Rendering,null,8920,2,2,2,59,53,56,83.54781723,82.05656719,82.81224477,240048,80016
+62545a4301d1d6264d1db338,success,desktop,qualcomm adreno 650,webgl,Multiple Objects Rendering,null,69,26,9,25,117,17,33,10.10894775,10.10894775,10.10894775,69624,23208
+62545aab01d1d6264d1db339,success,desktop,nvidia geforce rtx 3080,wasm-opengl,Multiple Objects Rendering,null,399,26,2,24,240,52,101,35.83660698,10.51765537,20.81398877,216108,72036
+62545ac301d1d6264d1db33a,success,desktop,nvidia geforce rtx 3080,wasm-opengl,Large Object Rendering,null,1234,0,0,0,240,236,240,64.82070827,59.66555882,62.12877192,240048,80016
+62545ae301d1d6264d1db33b,success,desktop,nvidia geforce rtx 3080,wasm-opengl,Large Object Rendering,null,517,0,0,0,240,236,240,65.50875473,63.35375023,64.52490706,240048,80016
+62545b2401d1d6264d1db33c,success,desktop,nvidia geforce rtx 3080,webgpu,Multiple Objects Rendering,null,361,20,1,16,240,5,79,29.603755,10.05975628,19.11141378,151920,50640
+62545b3c01d1d6264d1db33d,success,desktop,nvidia geforce rtx 3080,webgpu,Large Object Rendering,null,866,0,0,0,240,207,238,88.24448872,32.90744972,80.92549014,240048,80016
+62545b7cc46c67540b56e05d,success,desktop,nvidia geforce rtx 3080,webgl,Multiple Objects Rendering,null,22,26,1,23,237,1,79,34.68077946,8.28849125,18.95779971,135576,45192
+62545b94c46c67540b56e05e,success,desktop,nvidia geforce rtx 3080,webgl,Large Object Rendering,null,726,0,0,0,240,5,209,111.76736832,45.07752228,105.38436185,240048,80016
+62545bafc46c67540b56e05f,error,desktop,mali-g51 (Mali-G51),webgpu,Multiple Objects Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+62545bb401d1d6264d1db33e,error,desktop,mali-g51 (Mali-G51),webgpu,Large Object Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+62545bfac46c67540b56e060,success,desktop,mali-g51 (Mali-G51),wasm-opengl,Multiple Objects Rendering,null,1293,21,2,16,59,12,25,9.53674316,9.53674316,9.53674316,52740,17580
+62545c2101d1d6264d1db33f,success,desktop,mali-g51 (Mali-G51),wasm-opengl,Large Object Rendering,null,11259,1,1,1,60,51,59,9.53674316,9.53674316,9.53674316,240048,80016
+62545c49c46c67540b56e061,success,desktop,mali-g51 (Mali-G51),webgl,Large Object Rendering,null,10629,1,1,1,60,53,59,9.53674316,9.53674316,9.53674316,240048,80016
+62545c8c01d1d6264d1db340,success,desktop,mali-g51 (Mali-G51),webgl,Multiple Objects Rendering,null,467,30,9,25,57,6,19,9.53674316,9.53674316,9.53674316,38844,12948
+62545d4401d1d6264d1db341,error,desktop,arm mali-g78,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62545d5001d1d6264d1db342,error,desktop,arm mali-g78,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62545d96c46c67540b56e062,success,desktop,arm mali-g78,wasm-opengl,Multiple Objects Rendering,null,557,25,4,15,119,53,66,11.34872437,11.34872437,11.34872437,140472,46824
+62545db0c46c67540b56e063,success,desktop,arm mali-g78,wasm-opengl,Large Object Rendering,null,773,1,0,1,119,45,101,11.34872437,11.34872437,11.34872437,240048,80016
+62545df301d1d6264d1db343,success,desktop,arm mali-g78,webgl,Multiple Objects Rendering,null,66,25,6,21,119,31,52,11.34872437,11.34872437,11.34872437,111132,37044
+62545e0c01d1d6264d1db344,success,desktop,arm mali-g78,webgl,Large Object Rendering,null,1057,1,1,1,119,60,87,11.34872437,11.34872437,11.34872437,240048,80016
+62545ecac46c67540b56e064,error,desktop,apple a13 gpu,webgpu,Multiple Objects Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+62545ecfc46c67540b56e065,error,desktop,apple a13 gpu,webgpu,Large Object Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+62545f1801d1d6264d1db345,success,desktop,apple a13 gpu,wasm-opengl,Multiple Objects Rendering,null,886,11,2,9,30,29,30,0,0,0,63936,21312
+62545f3e01d1d6264d1db346,success,desktop,apple a13 gpu,wasm-opengl,Large Object Rendering,null,5063,1,0,0,31,30,30,0,0,0,240048,80016
+62545f6ac46c67540b56e066,success,desktop,nvidia geforce rtx 2070,webgpu,Multiple Objects Rendering,null,1057,25,2,21,144,41,71,26.40377903,5.55779743,15.10136633,152316,50772
+62545f83c46c67540b56e067,success,desktop,apple a13 gpu,webgl,Multiple Objects Rendering,null,101,14,3,11,31,28,30,0,0,0,63936,21312
+62545f84c46c67540b56e068,success,desktop,nvidia geforce rtx 2070,webgpu,Large Object Rendering,null,1685,1,0,1,144,1,136,84.89558029,78.67611599,82.47639384,240048,80016
+62545f9c01d1d6264d1db347,success,desktop,apple a13 gpu,webgl,Large Object Rendering,null,767,1,0,0,31,30,30,0,0,0,240048,80016
+62545fc701d1d6264d1db348,success,desktop,nvidia geforce rtx 2070,wasm-opengl,Multiple Objects Rendering,null,75,26,3,22,144,55,93,24.25732899,8.13227177,16.22626164,198792,66264
+62545fe101d1d6264d1db349,success,desktop,nvidia geforce rtx 2070,wasm-opengl,Large Object Rendering,null,702,1,0,1,144,57,138,61.65999985,59.95790005,60.8963409,240048,80016
+62546023c46c67540b56e069,success,desktop,nvidia geforce rtx 2070,webgl,Multiple Objects Rendering,null,29,25,4,23,144,37,69,24.13711548,6.05653763,15.37099127,146664,48888
+6254603bc46c67540b56e06a,success,desktop,nvidia geforce rtx 2070,webgl,Large Object Rendering,null,1488,1,0,1,144,140,143,45.4410696,42.59786415,44.14179752,240048,80016
+62546070c46c67540b56e06b,success,desktop,arm mali-t880,wasm-opengl,Multiple Objects Rendering,null,1183,21,7,16,60,12,28,10.10894775,10.10894775,10.10894775,59184,19728
+62546096c46c67540b56e06c,success,desktop,arm mali-t880,wasm-opengl,Large Object Rendering,null,8700,2,1,2,60,50,58,10.10894775,10.10894775,10.10894775,240048,80016
+625460a601d1d6264d1db34a,error,desktop,arm mali-t880,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625460ab01d1d6264d1db34b,error,desktop,arm mali-t880,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625460f3c46c67540b56e06d,success,desktop,arm mali-t880,webgl,Multiple Objects Rendering,null,340,24,10,21,58,14,25,10.10894775,10.10894775,10.10894775,52092,17364
+62546116c46c67540b56e06e,success,desktop,arm mali-t880,webgl,Large Object Rendering,null,6821,2,1,2,60,55,59,10.10894775,10.10894775,10.10894775,240048,80016
+62546603c46c67540b56e06f,success,desktop,nvidia geforce rtx 2070 super,wasm-opengl,Multiple Objects Rendering,null,65,26,2,24,144,45,79,20.99728298,7.62726879,13.83744127,169524,56508
+6254662b01d1d6264d1db34c,success,desktop,nvidia geforce rtx 2070 super,wasm-opengl,Large Object Rendering,null,1246,1,0,0,144,52,139,61.48847008,60.02798176,60.80312533,240048,80016
+62546631c46c67540b56e070,error,desktop,nvidia geforce rtx 2070 super,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62546633c46c67540b56e071,error,desktop,nvidia geforce rtx 2070 super,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625466c901d1d6264d1db34d,success,desktop,nvidia geforce rtx 2070 super,webgl,Multiple Objects Rendering,null,30,27,4,24,144,29,56,22.85386086,4.53412056,12.77798987,119412,39804
+6254675401d1d6264d1db34e,success,desktop,nvidia geforce rtx 2070 super,webgl,Large Object Rendering,null,1431,0,0,0,144,144,144,70.88033104,67.93134403,69.53534021,240048,80016
+625593a601d1d6264d1db34f,success,desktop,arm mali-g77,wasm-opengl,Multiple Objects Rendering,null,120,25,2,18,60,48,58,9.53674316,9.53674316,9.53674316,126144,42048
+625593bf01d1d6264d1db350,success,desktop,arm mali-g77,wasm-opengl,Large Object Rendering,null,918,1,0,1,60,17,58,9.53674316,9.53674316,9.53674316,240048,80016
+625593d1c46c67540b56e072,error,desktop,arm mali-g77,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625593d5c46c67540b56e073,error,desktop,arm mali-g77,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6255941701d1d6264d1db351,success,desktop,arm mali-g77,webgl,Multiple Objects Rendering,null,64,25,5,22,60,23,41,9.53674316,9.53674316,9.53674316,87048,29016
+6255943001d1d6264d1db352,success,desktop,arm mali-g77,webgl,Large Object Rendering,null,1426,1,0,1,60,59,60,9.53674316,9.53674316,9.53674316,240048,80016
+6255ab0001d1d6264d1db353,success,desktop,arm mali-g76,wasm-opengl,Multiple Objects Rendering,null,945,27,3,20,60,9,28,22.02987671,22.02987671,22.02987671,60300,20100
+6255ab2701d1d6264d1db354,success,desktop,arm mali-g76,wasm-opengl,Large Object Rendering,null,11576,1,0,1,60,22,58,22.02987671,22.02987671,22.02987671,240048,80016
+6255ad6401d1d6264d1db355,success,desktop,arm mali-g76,webgl,Multiple Objects Rendering,null,130,26,7,23,60,10,27,22.02987671,22.02987671,22.02987671,57348,19116
+6255ad8201d1d6264d1db356,success,desktop,arm mali-g76,webgl,Large Object Rendering,null,5363,1,1,1,60,59,60,22.02987671,22.02987671,22.02987671,240048,80016
+6256c3e9c46c67540b56e074,success,desktop,apple m1 pro,wasm-opengl,Multiple Objects Rendering,null,66,26,1,20,120,47,80,21.53936291,13.70947552,17.61989354,171648,57216
+6256c41f01d1d6264d1db357,success,desktop,apple m1 pro,wasm-opengl,Large Object Rendering,null,437,1,0,1,120,120,120,64.97326851,58.37094307,63.009669,240048,80016
+6256c47fc46c67540b56e075,success,desktop,apple m1 pro,webgpu,Multiple Objects Rendering,null,268,20,0,10,120,0,109,20.15738392,7.2873745,14.44700923,110088,36696
+6256c4bdc46c67540b56e076,success,desktop,apple m1 pro,webgpu,Large Object Rendering,null,544,1,1,1,120,119,120,111.64172268,107.32899666,109.75443629,240048,80016
+6256c52801d1d6264d1db358,success,desktop,apple m1 pro,webgl,Multiple Objects Rendering,null,41,3,0,2,120,0,80,15.27451134,5.24148273,10.59903526,9720,3240
+6256c54001d1d6264d1db359,success,desktop,apple m1 pro,webgl,Large Object Rendering,null,509,1,0,1,120,120,120,101.15835381,98.39654636,99.89539563,240048,80016
+625b523301d1d6264d1db35a,error,desktop,arm mali-g77 mc9,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625b523701d1d6264d1db35b,error,desktop,arm mali-g77 mc9,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+625b527dc46c67540b56e077,success,desktop,arm mali-g77 mc9,wasm-opengl,Multiple Objects Rendering,null,326,23,5,16,61,41,56,18.40591431,18.40591431,18.40591431,120096,40032
+625b529d01d1d6264d1db35c,success,desktop,arm mali-g77 mc9,wasm-opengl,Large Object Rendering,null,1484,2,0,1,61,9,58,18.40591431,18.40591431,18.40591431,240048,80016
+625b52e3c46c67540b56e078,success,desktop,arm mali-g77 mc9,webgl,Multiple Objects Rendering,null,43,24,6,20,61,26,44,18.40591431,18.40591431,18.40591431,94320,31440
+625b5300c46c67540b56e079,success,desktop,arm mali-g77 mc9,webgl,Large Object Rendering,null,1396,1,1,1,61,59,61,18.40591431,18.40591431,18.40591431,240048,80016
+625c216701d1d6264d1db35d,success,desktop,nvidia geforce rtx 2060,wasm-opengl,Multiple Objects Rendering,null,557,18,1,8,60,60,60,16.11228848,8.63244534,12.0416798,128772,42924
+625c217f01d1d6264d1db35e,success,desktop,nvidia geforce rtx 2060,wasm-opengl,Large Object Rendering,null,1744,0,0,0,60,60,60,82.58846092,58.11526966,67.29555988,240048,80016
+625c21ccc46c67540b56e07a,success,desktop,nvidia geforce rtx 2060,webgpu,Multiple Objects Rendering,null,391,23,2,12,60,56,60,36.53934574,9.35992527,20.81434985,127728,42576
+625c21fbc46c67540b56e07b,success,desktop,nvidia geforce rtx 2060,webgpu,Large Object Rendering,null,991,1,0,0,60,8,57,94.67477512,90.94636536,93.38900447,240048,80016
+625c225501d1d6264d1db35f,success,desktop,nvidia geforce rtx 2060,webgl,Multiple Objects Rendering,null,26,5,0,2,60,1,41,17.3569088,3.86623669,11.18195057,16488,5496
+625c228501d1d6264d1db360,success,desktop,nvidia geforce rtx 2060,webgl,Large Object Rendering,null,798,0,0,0,60,2,56,106.7894125,42.63858604,101.34269428,240048,80016
+62616cfd01d1d6264d1db361,error,desktop,arm mali-g51,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62616d0701d1d6264d1db362,error,desktop,arm mali-g51,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62616d4cc46c67540b56e07c,success,desktop,arm mali-g51,wasm-opengl,Multiple Objects Rendering,null,614,19,3,13,60,10,28,12.11166382,12.11166382,12.11166382,60444,20148
+62616d6ac46c67540b56e07d,success,desktop,arm mali-g51,wasm-opengl,Large Object Rendering,null,2804,1,0,1,60,0,57,12.11166382,12.11166382,12.11166382,240048,80016
+62616d85c46c67540b56e07e,error,desktop,qualcomm adreno 430,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62616d8cc46c67540b56e07f,error,desktop,qualcomm adreno 430,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62616db2c46c67540b56e080,success,desktop,arm mali-g51,webgl,Multiple Objects Rendering,null,176,26,7,22,59,11,26,12.11166382,12.11166382,12.11166382,54648,18216
+62616dd1c46c67540b56e081,success,desktop,arm mali-g51,webgl,Large Object Rendering,null,3256,1,0,1,60,50,59,12.11166382,12.11166382,12.11166382,240048,80016
+62616dd4c46c67540b56e082,success,desktop,qualcomm adreno 430,wasm-opengl,Multiple Objects Rendering,null,608,24,2,20,60,13,28,10.68115234,10.68115234,10.68115234,60192,20064
+62616df4c46c67540b56e083,success,desktop,qualcomm adreno 430,wasm-opengl,Large Object Rendering,null,6323,1,0,1,60,0,57,10.68115234,10.68115234,10.68115234,240048,80016
+62616e3801d1d6264d1db363,success,desktop,qualcomm adreno 430,webgl,Multiple Objects Rendering,null,294,26,8,23,57,8,16,10.68115234,10.68115234,10.68115234,34596,11532
+62616e5a01d1d6264d1db364,success,desktop,qualcomm adreno 430,webgl,Large Object Rendering,null,9357,1,1,1,59,34,56,10.68115234,10.68115234,10.68115234,240048,80016
+6262fcc5c46c67540b56e084,error,desktop,adreno 618,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6262fccbc46c67540b56e085,error,desktop,adreno 618,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6262fd0d01d1d6264d1db365,success,desktop,adreno 618,wasm-opengl,Multiple Objects Rendering,null,436,26,2,22,60,27,43,18.40591431,18.40591431,18.40591431,92376,30792
+6262fd2701d1d6264d1db366,success,desktop,adreno 618,wasm-opengl,Large Object Rendering,null,1573,1,0,1,60,1,57,18.40591431,18.40591431,18.40591431,240048,80016
+6262fd6ec46c67540b56e086,success,desktop,adreno 618,webgl,Multiple Objects Rendering,null,90,27,5,24,60,16,30,18.40591431,18.40591431,18.40591431,65232,21744
+6262fd8ac46c67540b56e087,success,desktop,adreno 618,webgl,Large Object Rendering,null,2045,1,0,1,60,60,60,18.40591431,18.40591431,18.40591431,240048,80016
+62632c6d01d1d6264d1db367,error,desktop,intel mesa intel hd graphics 530,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62632c7301d1d6264d1db368,error,desktop,intel mesa intel hd graphics 530,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+62632cbac46c67540b56e088,success,desktop,intel mesa intel hd graphics 530,wasm-opengl,Multiple Objects Rendering,null,637,26,1,17,60,37,51,15.0050993,7.37987804,11.74535472,111024,37008
+62632cd7c46c67540b56e089,success,desktop,intel mesa intel hd graphics 530,wasm-opengl,Large Object Rendering,null,1843,1,0,1,60,1,57,78.97554493,57.33473301,58.82266884,240048,80016
+62632d1e01d1d6264d1db369,success,desktop,intel mesa intel hd graphics 530,webgl,Multiple Objects Rendering,null,143,25,3,19,60,30,49,66.84934902,5.22826099,15.22987928,105048,35016
+62632d3901d1d6264d1db36a,success,desktop,intel mesa intel hd graphics 530,webgl,Large Object Rendering,null,1591,1,0,1,60,55,60,44.49890709,42.91520405,43.72354713,240048,80016
+6266acb601d1d6264d1db36b,error,desktop,mali-t830,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6266acbc01d1d6264d1db36c,error,desktop,mali-t830,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6266ad20c46c67540b56e08a,success,desktop,mali-t830,wasm-opengl,Multiple Objects Rendering,null,769,25,7,18,60,12,25,18.40591431,18.40591431,18.40591431,53172,17724
+6266ad4e01d1d6264d1db36d,error,desktop,intel hd graphics 4600,webgpu,Multiple Objects Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6266ad5201d1d6264d1db36e,error,desktop,intel hd graphics 4600,webgpu,Large Object Rendering,"Cannot read properties of null (reading 'requestDevice')",null,,,,,,,,,,null,null
+6266ad60c46c67540b56e08b,success,desktop,mali-t830,wasm-opengl,Large Object Rendering,null,6544,2,0,1,60,0,57,18.40591431,18.40591431,18.40591431,240048,80016
+6266ada501d1d6264d1db36f,success,desktop,intel hd graphics 4600,wasm-opengl,Multiple Objects Rendering,null,397,27,1,19,60,28,43,20.46249962,7.48645496,13.77438401,91440,30480
+6266adb901d1d6264d1db370,success,desktop,mali-t830,webgl,Multiple Objects Rendering,null,118,28,10,24,60,9,20,18.40591431,18.40591431,18.40591431,42264,14088
+6266add901d1d6264d1db371,success,desktop,mali-t830,webgl,Large Object Rendering,null,8630,1,1,1,60,57,60,18.40591431,18.40591431,18.40591431,240048,80016
+6266adea01d1d6264d1db372,success,desktop,intel hd graphics 4600,wasm-opengl,Large Object Rendering,null,1389,2,0,1,60,1,57,80.33439255,58.98730564,60.39445586,240048,80016
+6266ae2cc46c67540b56e08c,success,desktop,intel hd graphics 4600,webgl,Multiple Objects Rendering,null,40,25,2,20,60,25,48,24.05666828,5.654706,12.45826713,101412,33804
+6266ae46c46c67540b56e08d,success,desktop,intel hd graphics 4600,webgl,Large Object Rendering,null,1388,1,0,0,60,60,60,106.39690399,104.9496603,105.69013691,240048,80016
+6266ae5c01d1d6264d1db373,error,desktop,intel hd graphics family,webgpu,Multiple Objects Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+6266ae5f01d1d6264d1db374,error,desktop,intel hd graphics family,webgpu,Large Object Rendering,WebGPU not supported,null,,,,,,,,,,null,null
+6266aea0c46c67540b56e08e,success,desktop,intel hd graphics family,wasm-opengl,Multiple Objects Rendering,null,508,10,1,7,60,19,41,0,0,0,87012,29004
+6266aebac46c67540b56e08f,success,desktop,intel hd graphics family,wasm-opengl,Large Object Rendering,null,2644,0,0,0,60,59,60,0,0,0,240048,80016
+6266aefb01d1d6264d1db375,success,desktop,intel hd graphics family,webgl,Multiple Objects Rendering,null,68,11,2,8,60,17,42,0,0,0,88992,29664
+6266af1401d1d6264d1db376,success,desktop,intel hd graphics family,webgl,Large Object Rendering,null,1059,0,0,0,60,58,60,0,0,0,240048,80016
