@@ -4,7 +4,7 @@ L4: wasm-bindgen, console_error_panic_hook, wee_alloc, js-sys, nalgebra, rand, p
 
 WebGL:
 L3: 285Kb
-L4: gl-matrix
+L4: gl-matrix, jquery
 
 WebGPU:
 L3: 288Kb
