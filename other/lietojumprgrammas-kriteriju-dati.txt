@@ -1,0 +1,11 @@
+WASM + OpenGL
+L3: 296Kb
+L4: wasm-bindgen, console_error_panic_hook, wee_alloc, js-sys, nalgebra, rand, png, serde_json, serde_derive, serde
+
+WebGL:
+L3: 285Kb
+L4: gl-matrix
+
+WebGPU:
+L3: 288Kb
+L4: gl-matrix, @webgpu/types, typescript, @types/jquery, ts-loader
